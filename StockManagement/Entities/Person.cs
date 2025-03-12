@@ -1,0 +1,28 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Entities
+{
+    public abstract class Person
+    {
+        [Key]
+        public int ID { get; set; }
+        [StringLength(100)]
+        public string? Name { get; set; }
+        [StringLength(14)]
+        public string? Document { get; set; }
+        [StringLength(11)]
+        public string? Phone { get; set; }
+        [StringLength(50)]
+        public string? Email { get; set; }
+        [StringLength(50)]
+        public string? Street { get; set; }
+        [StringLength(10)]
+        public string? Number { get; set; }
+        [StringLength(50)]
+        public string? Neighborhood { get; set; }
+        [StringLength(50)]
+        public string? State { get; set; }
+        [StringLength(50)]
+        public string? City { get; set; }
+    }
+}
