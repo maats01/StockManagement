@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Microsoft.EntityFrameworkCore;
 using RepositoryContracts;
 
 namespace Repositories
@@ -12,29 +13,38 @@ namespace Repositories
             _db = db;
         }
 
-        public Task<Item> AddItem(Item item)
+        public async Task<Item> AddItem(Item item)
         {
-            throw new NotImplementedException();
+            _db.Items.Add(item);
+            await _db.SaveChangesAsync();
+
+            return item;
         }
 
-        public Task<Item> DeleteItem(int id)
+        public async Task<Item> RemoveItem(Item item)
         {
-            throw new NotImplementedException();
+            _db.Items.Remove(item);
+            await _db.SaveChangesAsync();
+
+            return item;
         }
 
-        public Task<Item> GetItemByID(int id)
+        public async Task<Item?> GetItemByID(int id)
         {
-            throw new NotImplementedException();
+            return await _db.Items.FirstOrDefaultAsync(i => i.ID == id);
         }
 
-        public Task<List<Item>> GetItems()
+        public async Task<List<Item>> GetItems()
         {
-            throw new NotImplementedException();
+            return await _db.Items.ToListAsync();
         }
 
-        public Task<Item> UpdateItem(Item item)
+        public async Task<Item> UpdateItem(Item item)
         {
-            throw new NotImplementedException();
+            _db.Items.Update(item);
+            await _db.SaveChangesAsync();
+
+            return item;
         }
     }
 }

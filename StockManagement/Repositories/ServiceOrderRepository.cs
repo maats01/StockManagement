@@ -1,4 +1,6 @@
 ﻿using Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using RepositoryContracts;
 
 namespace Repositories
@@ -12,54 +14,88 @@ namespace Repositories
             _db = db;
         }
 
-        public Task AddServiceItems(int serviceOrderId, List<ServiceOrder> serviceItems)
+        public async Task AddServiceItems(List<ServiceItem> serviceItems)
         {
-            throw new NotImplementedException();
+            foreach (ServiceItem serviceItem in serviceItems)
+            {
+                _db.ServiceItems.Add(serviceItem);
+            }
+
+            await _db.SaveChangesAsync();
         }
 
-        public Task<ServiceOrder> AddServiceOrder(ServiceOrder serviceOrder)
+        public async Task<ServiceOrder> AddServiceOrder(ServiceOrder serviceOrder)
         {
-            throw new NotImplementedException();
+            _db.ServiceOrders.Add(serviceOrder);
+            await _db.SaveChangesAsync();
+
+            return serviceOrder;
         }
 
-        public Task<ServiceItem> AddServiceOrderItem(int serviceOrderId, ServiceItem serviceItem)
+        public async Task<ServiceItem> AddServiceOrderItem(ServiceItem serviceItem)
         {
-            throw new NotImplementedException();
+            _db.ServiceItems.Add(serviceItem);
+            await _db.SaveChangesAsync();
+
+            return serviceItem;
         }
 
-        public Task<ServiceOrder> DeleteServiceOrder(int id)
+        public async Task<ServiceOrder> RemoveServiceOrder(ServiceOrder serviceOrder)
         {
-            throw new NotImplementedException();
+            _db.ServiceOrders.Remove(serviceOrder);
+            await _db.SaveChangesAsync();
+
+            return serviceOrder;
         }
 
-        public Task<List<ServiceItem>> GetServiceItems(int serviceOrderId)
+        public async Task<List<ServiceItem>> GetServiceItemsByServiceOrderId(int serviceOrderId)
         {
-            throw new NotImplementedException();
+            return await _db.ServiceItems
+                .Include(si => si.Item)
+                .Where(s => s.ServiceOrderID == serviceOrderId)
+                .ToListAsync();
         }
 
-        public Task<ServiceOrder> GetServiceOrderByID(int id)
+        public async Task<ServiceOrder?> GetServiceOrderByID(int id)
         {
-            throw new NotImplementedException();
+            return await _db.ServiceOrders
+                .Include(s => s.Customer)
+                .Include(s => s.ItemsService)
+                    .ThenInclude(si => si.Item)
+                .FirstOrDefaultAsync(s => s.ID == id);
         }
 
-        public Task<List<ServiceOrder>> GetServiceOrders()
+        public async Task<List<ServiceOrder>> GetServiceOrders()
         {
-            throw new NotImplementedException();
+            return await _db.ServiceOrders
+                .Include(s => s.Customer)
+                .Include(s => s.ItemsService)
+                    .ThenInclude(si => si.Item)
+                .ToListAsync();
         }
 
-        public Task<ServiceItem> RemoveServiceItem(int serviceOrderId, ServiceItem serviceItem)
+        public async Task<ServiceItem> RemoveServiceItem(ServiceItem serviceItem)
         {
-            throw new NotImplementedException();
+            _db.ServiceItems.Remove(serviceItem);
+            await _db.SaveChangesAsync();
+
+            return serviceItem;
         }
 
-        public Task<ServiceItem> UpdateServiceItem(int serviceOrderId, ServiceItem serviceItem)
+        public async Task<ServiceItem> UpdateServiceItem(ServiceItem serviceItem)
         {
-            throw new NotImplementedException();
+            _db.ServiceItems.Update(serviceItem);
+            await _db.SaveChangesAsync();
+
+            return serviceItem;
         }
 
-        public Task<ServiceOrder> UpdateServiceOrder(ServiceOrder serviceOrder)
+        public async Task<ServiceOrder> UpdateServiceOrder(ServiceOrder serviceOrder)
         {
-            throw new NotImplementedException();
+            _db.ServiceOrders.Update(serviceOrder);
+            await _db.SaveChangesAsync();
+
+            return serviceOrder;
         }
     }
 }

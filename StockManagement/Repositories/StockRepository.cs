@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Microsoft.EntityFrameworkCore;
 using RepositoryContracts;
 
 namespace Repositories
@@ -12,29 +13,42 @@ namespace Repositories
             _db = db;
         }
 
-        public Task<Stock> AddStock(Stock stock)
+        public async Task<Stock> AddStock(Stock stock)
         {
-            throw new NotImplementedException();
+            _db.Stocks.Add(stock);
+            await _db.SaveChangesAsync();
+
+            return stock;
         }
 
-        public Task<Stock> DeleteStock(int id)
+        public async Task<Stock> RemoveStock(Stock stock)
         {
-            throw new NotImplementedException();
+            _db.Stocks.Remove(stock);
+            await _db.SaveChangesAsync();
+
+            return stock;
         }
 
-        public Task<Stock> GetStockByID(int id)
+        public async Task<Stock?> GetStockByItemID(int itemId)
         {
-            throw new NotImplementedException();
+            return await _db.Stocks
+                .Include(s => s.Item)
+                .FirstOrDefaultAsync(s => s.ItemID == itemId);
         }
 
-        public Task<List<Stock>> GetStocks()
+        public async Task<List<Stock>> GetStocks()
         {
-            throw new NotImplementedException();
+            return await _db.Stocks
+                .Include(s => s.Item)
+                .ToListAsync();
         }
 
-        public Task<Stock> UpdateStock(Stock stock)
+        public async Task<Stock> UpdateStock(Stock stock)
         {
-            throw new NotImplementedException();
+            _db.Stocks.Update(stock);
+            await _db.SaveChangesAsync();
+
+            return stock;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Microsoft.EntityFrameworkCore;
 using RepositoryContracts;
 
 namespace Repositories
@@ -12,39 +13,48 @@ namespace Repositories
             _db = db;
         }
 
-        public Task<Person> AddPerson(Person person)
+        public async Task<Person> AddPerson(Person person)
         {
-            throw new NotImplementedException();
+            _db.Persons.Add(person);
+            await _db.SaveChangesAsync();
+
+            return person;
         }
 
-        public Task<Person> DeletePerson(int id)
+        public async Task<Person> RemovePerson(Person person)
         {
-            throw new NotImplementedException();
+            _db.Persons.Remove(person);
+            await _db.SaveChangesAsync();
+
+            return person;
         }
 
-        public Task<List<Person>> GetCustomers()
+        public async Task<List<Customer>> GetCustomers()
         {
-            throw new NotImplementedException();
+            return await _db.Persons.OfType<Customer>().ToListAsync();
         }
 
-        public Task<Person?> GetPersonByID(int id)
+        public async Task<Person?> GetPersonByID(int id)
         {
-            throw new NotImplementedException();
+            return await _db.Persons.FirstOrDefaultAsync(p => p.ID == id);
         }
 
-        public Task<List<Person>> GetPersons()
+        public async Task<List<Person>> GetPersons()
         {
-            throw new NotImplementedException();
+            return await _db.Persons.ToListAsync();
         }
 
-        public Task<List<Person>> GetSuppliers()
+        public async Task<List<Supplier>> GetSuppliers()
         {
-            throw new NotImplementedException();
+            return await _db.Persons.OfType<Supplier>().ToListAsync();
         }
 
-        public Task<Person> UpdatePerson(Person person)
+        public async Task<Person> UpdatePerson(Person person)
         {
-            throw new NotImplementedException();
+            _db.Persons.Update(person);
+            await _db.SaveChangesAsync();
+
+            return person;
         }
     }
 }

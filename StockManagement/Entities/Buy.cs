@@ -17,6 +17,6 @@ namespace Entities
         [ForeignKey(nameof(SupplierID))]
         public Supplier? Supplier { get; set; }
 
-        public virtual ICollection<BuyItem>? BuyItems{ get; set; }
+        public virtual ICollection<BuyItem> BuyItems{ get; set; } = new List<BuyItem>();
     }
 }

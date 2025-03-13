@@ -18,6 +18,6 @@ namespace Entities
         [ForeignKey(nameof(CustomerID))]
         public Customer? Customer { get; set; }
 
-        public virtual ICollection<ServiceItem>? ItemsService { get; set; }
+        public virtual ICollection<ServiceItem> ItemsService { get; set; } = new List<ServiceItem>();
     }
 }

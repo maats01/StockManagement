@@ -6,8 +6,8 @@ namespace RepositoryContracts
     {
         Task<Stock> AddStock(Stock stock);
         Task<List<Stock>> GetStocks();
-        Task<Stock> GetStockByID(int id);
+        Task<Stock?> GetStockByItemID(int itemId);
         Task<Stock> UpdateStock(Stock stock);
-        Task<Stock> DeleteStock(int id);
+        Task<Stock> RemoveStock(Stock stock);
     }
 }

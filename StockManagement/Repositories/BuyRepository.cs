@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Microsoft.EntityFrameworkCore;
 using RepositoryContracts;
 
 namespace Repositories
@@ -12,54 +13,88 @@ namespace Repositories
             _db = db;
         }
 
-        public Task<Buy> AddBuy(Buy buy)
+        public async Task<Buy> AddBuy(Buy buy)
         {
-            throw new NotImplementedException();
+            _db.Purchases.Add(buy);
+            await _db.SaveChangesAsync();
+
+            return buy;
         }
 
-        public Task<BuyItem> AddBuyItem(int buyId, BuyItem buyItem)
+        public async Task<BuyItem> AddBuyItem(BuyItem buyItem)
         {
-            throw new NotImplementedException();
+            _db.BuyItems.Add(buyItem);
+            await _db.SaveChangesAsync();
+
+            return buyItem;
         }
 
-        public Task AddBuyItems(int buyId, List<BuyItem> buyItems)
+        public async Task AddBuyItems(List<BuyItem> buyItems)
         {
-            throw new NotImplementedException();
+            foreach (BuyItem buyItem in buyItems)
+            {
+                _db.BuyItems.Add(buyItem);
+            }
+
+            await _db.SaveChangesAsync();
         }
 
-        public Task<Buy> DeleteBuy(int id)
+        public async Task<Buy> RemoveBuy(Buy buy)
         {
-            throw new NotImplementedException();
+            _db.Purchases.Remove(buy);
+            await _db.SaveChangesAsync();
+
+            return buy;
         }
 
-        public Task<Buy> GetBuyByID(int id)
+        public async Task<Buy?> GetBuyByID(int id)
         {
-            throw new NotImplementedException();
+            return await _db.Purchases
+                .Include(b => b.Supplier)
+                .Include(b => b.BuyItems)
+                    .ThenInclude(bi => bi.Item)
+                .FirstOrDefaultAsync(p => p.ID == id);
         }
 
-        public Task<List<BuyItem>> GetBuyItems(int buyId)
+        public async Task<List<BuyItem>> GetBuyItemsByBuyID(int buyId)
         {
-            throw new NotImplementedException();
+            return await _db.BuyItems
+                .Include(bi => bi.Item)
+                .Where(b => b.BuyID == buyId)
+                .ToListAsync();
         }
 
-        public Task<List<Buy>> GetBuys()
+        public async Task<List<Buy>> GetBuys()
         {
-            throw new NotImplementedException();
+            return await _db.Purchases
+                .Include(b => b.Supplier)
+                .Include(b => b.BuyItems)
+                    .ThenInclude(bi => bi.Item)
+                .ToListAsync();
         }
 
-        public Task<BuyItem> RemoveBuyItem(int buyId, BuyItem buyItem)
+        public async Task<BuyItem> RemoveBuyItem(BuyItem buyItem)
         {
-            throw new NotImplementedException();
+            _db.BuyItems.Remove(buyItem);
+            await _db.SaveChangesAsync();
+
+            return buyItem;
         }
 
-        public Task<Buy> UpdateBuy(Buy buy)
+        public async Task<Buy> UpdateBuy(Buy buy)
         {
-            throw new NotImplementedException();
+            _db.Purchases.Update(buy);
+            await _db.SaveChangesAsync();
+
+            return buy;
         }
 
-        public Task<BuyItem> UpdateBuyItem(int buyId, BuyItem buyItem)
+        public async Task<BuyItem> UpdateBuyItem(BuyItem buyItem)
         {
-            throw new NotImplementedException();
+            _db.BuyItems.Update(buyItem);
+            await _db.SaveChangesAsync();
+
+            return buyItem;
         }
     }
 }
