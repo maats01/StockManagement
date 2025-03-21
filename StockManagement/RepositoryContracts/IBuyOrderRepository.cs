@@ -2,7 +2,7 @@
 
 namespace RepositoryContracts
 {
-    public interface IBuyRepository
+    public interface IBuyOrderRepository
     {
         Task<BuyOrder> AddBuy(BuyOrder buy);
         Task<BuyOrder> UpdateBuy(BuyOrder buy);

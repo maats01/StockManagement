@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities
 {
+    /// <summary>
+    /// Entity that represents a relationship between ServiceOrder and Item
+    /// </summary>
     public class ServiceItem
     {
         [Key]

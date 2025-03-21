@@ -15,9 +15,9 @@ namespace ServiceContracts.DTO
         public string? State { get; set; }
         public string? City { get; set; }
 
-        public Person ToPerson()
+        public PersonUpdateDTO ToPersonUpdateDTO()
         {
-            return new Person()
+            return new PersonUpdateDTO()
             {
                 ID = ID,
                 Name = Name,
@@ -33,7 +33,7 @@ namespace ServiceContracts.DTO
         }
     }
 
-    public static class ExtensionMethod
+    public static class ExtensionMethodsForPerson
     {
         public static PersonDTO ToPersonDTO(this Person person)
         {

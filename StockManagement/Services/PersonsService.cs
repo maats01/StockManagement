@@ -1,5 +1,4 @@
 ﻿using Entities;
-using Repositories;
 using RepositoryContracts;
 using ServiceContracts;
 using ServiceContracts.DTO;
@@ -45,6 +44,24 @@ namespace Services
                 .ToList();
 
             return persons;
+        }
+
+        public async Task<List<PersonDTO>> GetCustomers()
+        {
+            List<PersonDTO> customers = (await _personRepository.GetCustomers())
+                .Select(p => p.ToPersonDTO())
+                .ToList();
+
+            return customers;
+        }
+
+        public async Task<List<PersonDTO>> GetSuppliers()
+        {
+            List<PersonDTO> suppliers = (await _personRepository.GetSuppliers())
+                .Select(p => p.ToPersonDTO())
+                .ToList();
+
+            return suppliers;
         }
 
         public async Task<bool> RemovePerson(int id)

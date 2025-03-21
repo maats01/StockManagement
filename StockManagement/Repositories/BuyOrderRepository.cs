@@ -4,11 +4,11 @@ using RepositoryContracts;
 
 namespace Repositories
 {
-    public class BuyRepository : IBuyRepository
+    public class BuyOrderRepository : IBuyOrderRepository
     {
         private readonly ApplicationDbContext _db;
 
-        public BuyRepository(ApplicationDbContext db)
+        public BuyOrderRepository(ApplicationDbContext db)
         {
             _db = db;
         }

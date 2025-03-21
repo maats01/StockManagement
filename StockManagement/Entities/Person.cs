@@ -2,6 +2,9 @@
 
 namespace Entities
 {
+    /// <summary>
+    /// Entity that represents a person
+    /// </summary>
     public class Person
     {
         [Key]

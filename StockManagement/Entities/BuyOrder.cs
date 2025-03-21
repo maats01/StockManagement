@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities
 {
+    /// <summary>
+    /// Entity that represents a buy order
+    /// </summary>
     public class BuyOrder
     {
         [Key]
