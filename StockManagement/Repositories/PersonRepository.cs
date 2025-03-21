@@ -29,9 +29,11 @@ namespace Repositories
             return person;
         }
 
-        public async Task<List<Customer>> GetCustomers()
+        public async Task<List<Person>> GetCustomers()
         {
-            return await _db.Persons.OfType<Customer>().ToListAsync();
+            return await _db.Persons
+                .Where(p => p.IsCustomer == true)
+                .ToListAsync();
         }
 
         public async Task<Person?> GetPersonByID(int id)
@@ -44,9 +46,11 @@ namespace Repositories
             return await _db.Persons.ToListAsync();
         }
 
-        public async Task<List<Supplier>> GetSuppliers()
+        public async Task<List<Person>> GetSuppliers()
         {
-            return await _db.Persons.OfType<Supplier>().ToListAsync();
+            return await _db.Persons
+                .Where(p => p.IsCustomer == false)
+                .ToListAsync();
         }
 
         public async Task<Person> UpdatePerson(Person person)

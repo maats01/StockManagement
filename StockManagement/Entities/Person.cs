@@ -2,15 +2,17 @@
 
 namespace Entities
 {
-    public abstract class Person
+    public class Person
     {
         [Key]
         public int ID { get; set; }
         [StringLength(100)]
+        [Required(ErrorMessage = "O Nome não pode ficar em branco")]
         public string? Name { get; set; }
         [StringLength(14)]
         public string? Document { get; set; }
         [StringLength(11)]
+        [Required(ErrorMessage = "O Telefone não pode ficar em branco")]
         public string? Phone { get; set; }
         [StringLength(50)]
         public string? Email { get; set; }
@@ -24,5 +26,6 @@ namespace Entities
         public string? State { get; set; }
         [StringLength(50)]
         public string? City { get; set; }
+        public bool IsCustomer { get; set; }
     }
 }

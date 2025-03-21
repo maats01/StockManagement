@@ -1,7 +1,9 @@
-﻿using Repositories;
+﻿using Entities;
+using Repositories;
 using RepositoryContracts;
 using ServiceContracts;
 using ServiceContracts.DTO;
+using Services.Helpers;
 
 namespace Services
 {
@@ -14,29 +16,59 @@ namespace Services
             _personRepository = personRepository;
         }
 
-        public Task<PersonDTO> AddPerson(PersonCreateDTO personCreateDTO)
+        public async Task<PersonDTO> AddPerson(PersonCreateDTO? personCreateDTO)
         {
-            throw new NotImplementedException();
+            if (personCreateDTO == null)
+                throw new ArgumentNullException(nameof(personCreateDTO));
+
+            ValidationHelper.ModelValidation(personCreateDTO);
+
+            Person person = await _personRepository.AddPerson(personCreateDTO.ToPerson());
+
+            return person.ToPersonDTO();
         }
 
-        public Task<PersonDTO?> GetPersonByID(int id)
+        public async Task<PersonDTO?> GetPersonByID(int id)
         {
-            throw new NotImplementedException();
+            Person? person = await _personRepository.GetPersonByID(id);
+
+            if (person == null)
+                return null;
+
+            return person.ToPersonDTO();
         }
 
-        public Task<List<PersonDTO>> GetPersons()
+        public async Task<List<PersonDTO>> GetPersons()
         {
-            throw new NotImplementedException();
+            List<PersonDTO> persons = (await _personRepository.GetPersons())
+                .Select(p => p.ToPersonDTO())
+                .ToList();
+
+            return persons;
         }
 
-        public Task<PersonDTO> RemovePerson(int id)
+        public async Task<bool> RemovePerson(int id)
         {
-            throw new NotImplementedException();
+            Person? person = await _personRepository.GetPersonByID(id);
+
+            if (person == null)
+                return false;
+
+            await _personRepository.RemovePerson(person);
+
+            return true;
         }
 
-        public Task<PersonDTO> UpdatePerson(PersonUpdateDTO personUpdateDTO)
+        public async Task<PersonDTO> UpdatePerson(PersonUpdateDTO? personUpdateDTO)
         {
-            throw new NotImplementedException();
+            if (personUpdateDTO == null)
+                throw new ArgumentNullException(nameof(personUpdateDTO));
+
+            ValidationHelper.ModelValidation(personUpdateDTO);
+
+            Person person = await _personRepository.UpdatePerson(personUpdateDTO.ToPerson());
+
+            return person.ToPersonDTO();
         }
     }
 }

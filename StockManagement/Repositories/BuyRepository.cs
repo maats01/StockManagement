@@ -13,7 +13,7 @@ namespace Repositories
             _db = db;
         }
 
-        public async Task<Buy> AddBuy(Buy buy)
+        public async Task<BuyOrder> AddBuy(BuyOrder buy)
         {
             _db.Purchases.Add(buy);
             await _db.SaveChangesAsync();
@@ -39,7 +39,7 @@ namespace Repositories
             await _db.SaveChangesAsync();
         }
 
-        public async Task<Buy> RemoveBuy(Buy buy)
+        public async Task<BuyOrder> RemoveBuy(BuyOrder buy)
         {
             _db.Purchases.Remove(buy);
             await _db.SaveChangesAsync();
@@ -47,7 +47,7 @@ namespace Repositories
             return buy;
         }
 
-        public async Task<Buy?> GetBuyByID(int id)
+        public async Task<BuyOrder?> GetBuyByID(int id)
         {
             return await _db.Purchases
                 .Include(b => b.Supplier)
@@ -64,7 +64,7 @@ namespace Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<Buy>> GetBuys()
+        public async Task<List<BuyOrder>> GetBuys()
         {
             return await _db.Purchases
                 .Include(b => b.Supplier)
@@ -81,7 +81,7 @@ namespace Repositories
             return buyItem;
         }
 
-        public async Task<Buy> UpdateBuy(Buy buy)
+        public async Task<BuyOrder> UpdateBuy(BuyOrder buy)
         {
             _db.Purchases.Update(buy);
             await _db.SaveChangesAsync();

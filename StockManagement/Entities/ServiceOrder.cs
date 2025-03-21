@@ -7,7 +7,9 @@ namespace Entities
     {
         [Key]
         public int ID { get; set; }
+        [Range(1, 10000, ErrorMessage = "O valor total deve ser um número entre 1 e 100000")]
         public float TotalProductValue { get; set; }
+        [Range(1, 10000, ErrorMessage = "O valor de mão de obra deve ser um número entre 1 e 10000")]
         public float TotalLabor { get; set; }
         [StringLength(25)]
         public string? Status { get; set; }
@@ -16,7 +18,7 @@ namespace Entities
 
         public int CustomerID { get; set; }
         [ForeignKey(nameof(CustomerID))]
-        public Customer? Customer { get; set; }
+        public Person? Customer { get; set; }
 
         public virtual ICollection<ServiceItem> ItemsService { get; set; } = new List<ServiceItem>();
     }

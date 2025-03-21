@@ -3,10 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities
 {
-    public class Buy
+    public class BuyOrder
     {
         [Key]
         public int ID { get; set; }
+        [Range(1, 10000, ErrorMessage = "O valor total deve ser um número entre 1 e 100000")]
         public float TotalValue { get; set; }
         [StringLength(25)]
         public string? Status { get; set; }
@@ -15,7 +16,7 @@ namespace Entities
 
         public int SupplierID { get; set; }
         [ForeignKey(nameof(SupplierID))]
-        public Supplier? Supplier { get; set; }
+        public Person? Supplier { get; set; }
 
         public virtual ICollection<BuyItem> BuyItems{ get; set; } = new List<BuyItem>();
     }

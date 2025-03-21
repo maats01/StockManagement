@@ -4,11 +4,11 @@ namespace RepositoryContracts
 {
     public interface IBuyRepository
     {
-        Task<Buy> AddBuy(Buy buy);
-        Task<Buy> UpdateBuy(Buy buy);
-        Task<List<Buy>> GetBuys();
-        Task<Buy?> GetBuyByID(int id);
-        Task<Buy> RemoveBuy(Buy buy);
+        Task<BuyOrder> AddBuy(BuyOrder buy);
+        Task<BuyOrder> UpdateBuy(BuyOrder buy);
+        Task<List<BuyOrder>> GetBuys();
+        Task<BuyOrder?> GetBuyByID(int id);
+        Task<BuyOrder> RemoveBuy(BuyOrder buy);
         Task<BuyItem> AddBuyItem(BuyItem buyItem);
         Task AddBuyItems(List<BuyItem> buyItems);
         Task<List<BuyItem>> GetBuyItemsByBuyID(int buyId);

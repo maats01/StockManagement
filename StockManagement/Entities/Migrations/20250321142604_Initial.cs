@@ -42,7 +42,7 @@ namespace Entities.Migrations
                     Neighborhood = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     State = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false)
+                    IsCustomer = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

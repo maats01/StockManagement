@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entities.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250312163006_Initial")]
+    [Migration("20250321142604_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,37 +24,6 @@ namespace Entities.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Entities.Buy", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<DateTime>("BuyDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("RegistrationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Status")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
-                    b.Property<int>("SupplierID")
-                        .HasColumnType("int");
-
-                    b.Property<float>("TotalValue")
-                        .HasColumnType("real");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("SupplierID");
-
-                    b.ToTable("Purchases");
-                });
 
             modelBuilder.Entity("Entities.BuyItem", b =>
                 {
@@ -83,6 +52,37 @@ namespace Entities.Migrations
                     b.HasIndex("ItemID");
 
                     b.ToTable("BuyItems");
+                });
+
+            modelBuilder.Entity("Entities.BuyOrder", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<DateTime>("BuyDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.Property<int>("SupplierID")
+                        .HasColumnType("int");
+
+                    b.Property<float>("TotalValue")
+                        .HasColumnType("real");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("SupplierID");
+
+                    b.ToTable("Purchases");
                 });
 
             modelBuilder.Entity("Entities.Item", b =>
@@ -132,6 +132,9 @@ namespace Entities.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<bool>("IsCustomer")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -156,18 +159,9 @@ namespace Entities.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
-
                     b.HasKey("ID");
 
                     b.ToTable("Persons");
-
-                    b.HasDiscriminator<string>("Type").HasValue("Person");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Entities.ServiceItem", b =>
@@ -249,34 +243,9 @@ namespace Entities.Migrations
                     b.ToTable("Stocks");
                 });
 
-            modelBuilder.Entity("Entities.Customer", b =>
-                {
-                    b.HasBaseType("Entities.Person");
-
-                    b.HasDiscriminator().HasValue("Customer");
-                });
-
-            modelBuilder.Entity("Entities.Supplier", b =>
-                {
-                    b.HasBaseType("Entities.Person");
-
-                    b.HasDiscriminator().HasValue("Supplier");
-                });
-
-            modelBuilder.Entity("Entities.Buy", b =>
-                {
-                    b.HasOne("Entities.Supplier", "Supplier")
-                        .WithMany()
-                        .HasForeignKey("SupplierID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Supplier");
-                });
-
             modelBuilder.Entity("Entities.BuyItem", b =>
                 {
-                    b.HasOne("Entities.Buy", "Buy")
+                    b.HasOne("Entities.BuyOrder", "Buy")
                         .WithMany("BuyItems")
                         .HasForeignKey("BuyID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -291,6 +260,17 @@ namespace Entities.Migrations
                     b.Navigation("Buy");
 
                     b.Navigation("Item");
+                });
+
+            modelBuilder.Entity("Entities.BuyOrder", b =>
+                {
+                    b.HasOne("Entities.Person", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("Entities.ServiceItem", b =>
@@ -314,7 +294,7 @@ namespace Entities.Migrations
 
             modelBuilder.Entity("Entities.ServiceOrder", b =>
                 {
-                    b.HasOne("Entities.Customer", "Customer")
+                    b.HasOne("Entities.Person", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -334,7 +314,7 @@ namespace Entities.Migrations
                     b.Navigation("Item");
                 });
 
-            modelBuilder.Entity("Entities.Buy", b =>
+            modelBuilder.Entity("Entities.BuyOrder", b =>
                 {
                     b.Navigation("BuyItems");
                 });

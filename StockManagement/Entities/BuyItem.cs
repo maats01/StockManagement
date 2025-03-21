@@ -7,12 +7,14 @@ namespace Entities
     {
         [Key]
         public int ID { get; set; }
+        [Range(1, 10000, ErrorMessage = "O valor unitário deve ser um número entre 1 e 10000")]
         public float UnitValue { get; set; }
+        [Range(1, 10000, ErrorMessage = "A quantidade deve ser um número entre 1 e 10000")]
         public int Quantity { get; set; }
 
         public int BuyID { get; set; }
         [ForeignKey(nameof(BuyID))]
-        public Buy? Buy { get; set; }
+        public BuyOrder? Buy { get; set; }
 
         public int ItemID { get; set; }
         [ForeignKey(nameof(ItemID))]
