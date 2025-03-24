@@ -35,19 +35,6 @@ namespace Tests
         #region AddItem
 
         [Fact]
-        public async Task AddItem_NullCreateDTO_ToThrowArgumentNullException()
-        {
-            ItemCreateDTO? itemCreateDTO = null;
-
-            Func<Task> action = async () =>
-            {
-                await _itemsService.AddItem(itemCreateDTO);
-            };
-
-            await action.Should().ThrowAsync<ArgumentNullException>();
-        }
-
-        [Fact]
         public async Task AddItem_ValidValues_ToBeSuccessful()
         {
             ItemCreateDTO? itemCreateDTO = _fixture.Create<ItemCreateDTO>();
@@ -135,19 +122,6 @@ namespace Tests
         #region UpdateItem
 
         [Fact]
-        public async Task UpdateItem_NullUpdateDTO_ToThrowArgumentNullException()
-        {
-            ItemUpdateDTO? itemUpdateDTO = null;
-
-            Func<Task> action = async () => 
-            { 
-                await _itemsService.UpdateItem(itemUpdateDTO);
-            };
-
-            await action.Should().ThrowAsync<ArgumentNullException>();
-        }
-
-        [Fact]
         public async Task UpdateItem_ValidUpdateDTO_ToBeSuccessful()
         {
             ItemUpdateDTO itemUpdateDTO = _fixture.Create<ItemUpdateDTO>();
@@ -170,6 +144,10 @@ namespace Tests
         [Fact]
         public async Task UpdateItem_InvalidID_ToBeFalse()
         {
+            _itemsRepositoryMock
+                .Setup(t => t.GetItemByID(It.IsAny<int>()))
+                .ReturnsAsync(null as Item);
+
             bool isRemoved = await _itemsService.RemoveItem(55);
 
             isRemoved.Should().BeFalse();
@@ -182,6 +160,10 @@ namespace Tests
 
             _itemsRepositoryMock
                 .Setup(t => t.GetItemByID(It.IsAny<int>()))
+                .ReturnsAsync(item);
+
+            _itemsRepositoryMock
+                .Setup(t => t.RemoveItem(It.IsAny<Item>()))
                 .ReturnsAsync(item);
 
             bool isRemoved = await _itemsService.RemoveItem(item.ID);

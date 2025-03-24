@@ -8,13 +8,11 @@ namespace ServiceContracts
     public interface IPersonsService
     {
         /// <summary>
-        /// Validate the PersonCreateDTO model and calls the PersonRepository
-        /// to insert it into the database if everything is correct; if not,
-        /// it will throw exceptions based on the error
+        /// Inserts a new Person in the database
         /// </summary>
         /// <param name="personCreateDTO">Person to add</param>
         /// <returns>The newly added person as a PersonDTO</returns>
-        Task<PersonDTO> AddPerson(PersonCreateDTO? personCreateDTO);
+        Task<PersonDTO> AddPerson(PersonCreateDTO personCreateDTO);
         /// <summary>
         /// Returns every person in the database
         /// </summary>
@@ -37,13 +35,11 @@ namespace ServiceContracts
         /// <returns>PersonDTO object or null</returns>
         Task<PersonDTO?> GetPersonByID(int id);
         /// <summary>
-        /// Validates the PersonUpdateDTO model and calls the PersonRepository
-        /// to update it in the database if everything is correct; if not, it will
-        /// throw exceptions based on errors
+        /// Updates a Person in the database
         /// </summary>
         /// <param name="personUpdateDTO">Person to update</param>
         /// <returns>PersonDTO object with updated data</returns>
-        Task<PersonDTO> UpdatePerson(PersonUpdateDTO? personUpdateDTO);
+        Task<PersonDTO> UpdatePerson(PersonUpdateDTO personUpdateDTO);
         /// <summary>
         /// Removes a person based on given ID
         /// </summary>

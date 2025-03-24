@@ -34,19 +34,6 @@ namespace Tests
         #region AddPerson
 
         [Fact]
-        public async Task AddPerson_NullCreateDTO_ToThrowArgumentNullException()
-        {
-            PersonCreateDTO? personCreateDTO = null;
-
-            Func<Task> action = async () =>
-            {
-                await _personsService.AddPerson(personCreateDTO);
-            };
-
-            await action.Should().ThrowAsync<ArgumentNullException>();
-        }
-
-        [Fact]
         public async Task AddPerson_ValidCreateDTO_ToBeSuccessful()
         {
             PersonCreateDTO personCreateDTO = _fixture.Build<PersonCreateDTO>()
@@ -204,19 +191,6 @@ namespace Tests
         #region UpdatePerson
 
         [Fact]
-        public async Task UpdatePerson_NullUpdateDTO_ToThrowArgumentNullException()
-        {
-            PersonUpdateDTO? personUpdateDTO = null;
-
-            Func<Task> action = async () =>
-            {
-                await _personsService.UpdatePerson(personUpdateDTO);
-            };
-
-            await action.Should().ThrowAsync<ArgumentNullException>();
-        }
-
-        [Fact]
         public async Task UpdatePerson_ValidUpdateDTO_ToBeSuccessful()
         {
             PersonUpdateDTO? personUpdateDTO = _fixture
@@ -243,11 +217,11 @@ namespace Tests
         [Fact]
         public async Task RemovePerson_InvalidID_ToBeFalse()
         {
-            bool isRemoved = await _personsService.RemovePerson(55);
-
             _personsRepositoryMock
                 .Setup(t => t.GetPersonByID(It.IsAny<int>()))
                 .ReturnsAsync(null as Person);
+
+            bool isRemoved = await _personsService.RemovePerson(55);
 
             isRemoved.Should().BeFalse();
         }
@@ -259,6 +233,10 @@ namespace Tests
 
             _personsRepositoryMock
                 .Setup(t => t.GetPersonByID(It.IsAny<int>()))
+                .ReturnsAsync(person);
+
+            _personsRepositoryMock
+                .Setup(t => t.RemovePerson(It.IsAny<Person>()))
                 .ReturnsAsync(person);
 
             bool isRemoved = await _personsService.RemovePerson(person.ID);

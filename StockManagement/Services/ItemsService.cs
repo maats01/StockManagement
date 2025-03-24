@@ -1,6 +1,8 @@
 ﻿using ServiceContracts;
 using ServiceContracts.DTO;
 using RepositoryContracts;
+using Entities;
+using Services.Helpers;
 
 namespace Services
 {
@@ -13,29 +15,49 @@ namespace Services
             _itemsRepository = itemsRepository;
         }
 
-        public Task<ItemDTO> AddItem(ItemCreateDTO? itemCreateDTO)
+        public async Task<ItemDTO> AddItem(ItemCreateDTO itemCreateDTO)
         {
-            throw new NotImplementedException();
+            Item item = await _itemsRepository.AddItem(itemCreateDTO.ToItem());
+
+            return item.ToItemDTO();            
         }
 
-        public Task<ItemDTO?> GetItemByID(int id)
+        public async Task<ItemDTO?> GetItemByID(int id)
         {
-            throw new NotImplementedException();
+            Item? item = await _itemsRepository.GetItemByID(id);
+
+            if (item == null)
+                return null;
+
+            return item.ToItemDTO();
         }
 
-        public Task<List<ItemDTO>> GetItems()
+        public async Task<List<ItemDTO>> GetItems()
         {
-            throw new NotImplementedException();
+            List<ItemDTO> items = (await _itemsRepository.GetItems())
+                .Select(i => i.ToItemDTO())
+                .ToList();
+
+            return items;
         }
 
-        public Task<bool> RemoveItem(int id)
+        public async Task<bool> RemoveItem(int id)
         {
-            throw new NotImplementedException();
+            Item? item = await _itemsRepository.GetItemByID(id);
+
+            if (item == null)
+                return false;
+            
+            await _itemsRepository.RemoveItem(item);
+
+            return true;
         }
 
-        public Task<ItemDTO> UpdateItem(ItemUpdateDTO? itemUpdateDTO)
+        public async Task<ItemDTO> UpdateItem(ItemUpdateDTO itemUpdateDTO)
         {
-            throw new NotImplementedException();
+            Item item = await _itemsRepository.UpdateItem(itemUpdateDTO.ToItem());
+
+            return item.ToItemDTO();
         }
     }
 }

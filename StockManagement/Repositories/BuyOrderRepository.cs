@@ -56,7 +56,7 @@ namespace Repositories
                 .FirstOrDefaultAsync(p => p.ID == id);
         }
 
-        public async Task<List<BuyItem>> GetBuyItemsByBuyID(int buyId)
+        public async Task<List<BuyItem>> GetBuyItemsByBuyOrderID(int buyId)
         {
             return await _db.BuyItems
                 .Include(bi => bi.Item)

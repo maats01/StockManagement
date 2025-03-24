@@ -8,13 +8,11 @@ namespace ServiceContracts
     public interface IItemsService
     {
         /// <summary>
-        /// Validate the ItemCreateDTO model and calls the ItemRepository
-        /// to insert it into the database if everything is correct; if not,
-        /// it will throw exceptions based on the error
+        /// Inserts a new Item in the database
         /// </summary>
         /// <param name="itemCreateDTO">Item to add</param>
         /// <returns>The newly added item as ItemDTO</returns>
-        Task<ItemDTO> AddItem(ItemCreateDTO? itemCreateDTO);
+        Task<ItemDTO> AddItem(ItemCreateDTO itemCreateDTO);
         /// <summary>
         /// Returns every item in the database
         /// </summary>
@@ -27,13 +25,11 @@ namespace ServiceContracts
         /// <returns>ItemDTO object or null</returns>
         Task<ItemDTO?> GetItemByID(int id);
         /// <summary>
-        /// Validate the ItemUpdateDTO model and calls the ItemRepository
-        /// to update it in the database if everything is correct; if not,
-        /// it will throw exceptions based on the error
+        /// Updates a Item in the database
         /// </summary>
         /// <param name="itemUpdateDTO">Item to update</param>
         /// <returns>ItemDTO object with updated data</returns>
-        Task<ItemDTO> UpdateItem(ItemUpdateDTO? itemUpdateDTO);
+        Task<ItemDTO> UpdateItem(ItemUpdateDTO itemUpdateDTO);
         /// <summary>
         /// Removes a item based on the given ID
         /// </summary>

@@ -15,13 +15,8 @@ namespace Services
             _personRepository = personRepository;
         }
 
-        public async Task<PersonDTO> AddPerson(PersonCreateDTO? personCreateDTO)
+        public async Task<PersonDTO> AddPerson(PersonCreateDTO personCreateDTO)
         {
-            if (personCreateDTO == null)
-                throw new ArgumentNullException(nameof(personCreateDTO));
-
-            ValidationHelper.ModelValidation(personCreateDTO);
-
             Person person = await _personRepository.AddPerson(personCreateDTO.ToPerson());
 
             return person.ToPersonDTO();
@@ -76,13 +71,8 @@ namespace Services
             return true;
         }
 
-        public async Task<PersonDTO> UpdatePerson(PersonUpdateDTO? personUpdateDTO)
+        public async Task<PersonDTO> UpdatePerson(PersonUpdateDTO personUpdateDTO)
         {
-            if (personUpdateDTO == null)
-                throw new ArgumentNullException(nameof(personUpdateDTO));
-
-            ValidationHelper.ModelValidation(personUpdateDTO);
-
             Person person = await _personRepository.UpdatePerson(personUpdateDTO.ToPerson());
 
             return person.ToPersonDTO();
