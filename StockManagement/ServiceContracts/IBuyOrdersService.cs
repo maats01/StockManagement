@@ -2,7 +2,7 @@
 
 namespace ServiceContracts
 {
-    public interface IBuyOrderService
+    public interface IBuyOrdersService
     {
         Task<BuyOrderDTO> AddBuyOrder(BuyOrderCreateDTO buyOrderCreateDTO);
         Task<List<BuyOrderDTO>> GetBuyOrders();
@@ -10,6 +10,6 @@ namespace ServiceContracts
         Task<BuyOrderDTO> UpdateBuyOrder(BuyOrderUpdateDTO buyOrderUpdateDTO);
         Task<List<BuyItemDTO>> AddBuyItems(List<BuyItemCreateDTO> buyItems);
         Task<BuyItemDTO> UpdateBuyItem(BuyItemUpdateDTO buyItemUpdateDTO);
-        Task<bool> RemoveBuyItem(int buyItemID, int itemID);
+        Task<bool> RemoveBuyItem(int buyOrderID, int itemID);
     }
 }

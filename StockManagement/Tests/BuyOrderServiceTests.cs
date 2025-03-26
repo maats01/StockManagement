@@ -8,7 +8,7 @@ namespace Tests
 {
     public class BuyOrderServiceTests
     {
-        private readonly IBuyOrderService _buyOrderService;
+        private readonly IBuyOrdersService _buyOrderService;
         private readonly IBuyOrderRepository _buyOrderRepository;
         private readonly Mock<IBuyOrderRepository> _buyOrderRepositoryMock;
         private readonly IFixture _fixture;

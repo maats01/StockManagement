@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entities.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250321142604_Initial")]
+    [Migration("20250326173314_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -82,7 +82,7 @@ namespace Entities.Migrations
 
                     b.HasIndex("SupplierID");
 
-                    b.ToTable("Purchases");
+                    b.ToTable("BuyOrders");
                 });
 
             modelBuilder.Entity("Entities.Item", b =>
@@ -94,6 +94,7 @@ namespace Entities.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -136,6 +137,7 @@ namespace Entities.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -148,6 +150,7 @@ namespace Entities.Migrations
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasMaxLength(11)
                         .HasColumnType("nvarchar(11)");
 
@@ -201,9 +204,6 @@ namespace Entities.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int>("CustomerID")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
 
@@ -220,9 +220,12 @@ namespace Entities.Migrations
                     b.Property<float>("TotalProductValue")
                         .HasColumnType("real");
 
+                    b.Property<int>("VehicleID")
+                        .HasColumnType("int");
+
                     b.HasKey("ID");
 
-                    b.HasIndex("CustomerID");
+                    b.HasIndex("VehicleID");
 
                     b.ToTable("ServiceOrders");
                 });
@@ -243,9 +246,35 @@ namespace Entities.Migrations
                     b.ToTable("Stocks");
                 });
 
+            modelBuilder.Entity("Entities.Vehicle", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("OwnerID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Plate")
+                        .HasMaxLength(7)
+                        .HasColumnType("nvarchar(7)");
+
+                    b.Property<string>("Type")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("OwnerID");
+
+                    b.ToTable("Vehicles");
+                });
+
             modelBuilder.Entity("Entities.BuyItem", b =>
                 {
-                    b.HasOne("Entities.BuyOrder", "Buy")
+                    b.HasOne("Entities.BuyOrder", "BuyOrder")
                         .WithMany("BuyItems")
                         .HasForeignKey("BuyID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -257,7 +286,7 @@ namespace Entities.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Buy");
+                    b.Navigation("BuyOrder");
 
                     b.Navigation("Item");
                 });
@@ -294,13 +323,13 @@ namespace Entities.Migrations
 
             modelBuilder.Entity("Entities.ServiceOrder", b =>
                 {
-                    b.HasOne("Entities.Person", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerID")
+                    b.HasOne("Entities.Vehicle", "Vehicle")
+                        .WithMany("ServiceOrders")
+                        .HasForeignKey("VehicleID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.Navigation("Vehicle");
                 });
 
             modelBuilder.Entity("Entities.Stock", b =>
@@ -314,14 +343,35 @@ namespace Entities.Migrations
                     b.Navigation("Item");
                 });
 
+            modelBuilder.Entity("Entities.Vehicle", b =>
+                {
+                    b.HasOne("Entities.Person", "Owner")
+                        .WithMany("Vehicles")
+                        .HasForeignKey("OwnerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("Entities.BuyOrder", b =>
                 {
                     b.Navigation("BuyItems");
                 });
 
+            modelBuilder.Entity("Entities.Person", b =>
+                {
+                    b.Navigation("Vehicles");
+                });
+
             modelBuilder.Entity("Entities.ServiceOrder", b =>
                 {
                     b.Navigation("ItemsService");
+                });
+
+            modelBuilder.Entity("Entities.Vehicle", b =>
+                {
+                    b.Navigation("ServiceOrders");
                 });
 #pragma warning restore 612, 618
         }

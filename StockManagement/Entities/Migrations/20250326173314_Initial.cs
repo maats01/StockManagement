@@ -17,7 +17,7 @@ namespace Entities.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     MeasureUnit = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
                     MinimumStock = table.Column<int>(type: "int", nullable: false),
                     MaximumStock = table.Column<int>(type: "int", nullable: false)
@@ -33,9 +33,9 @@ namespace Entities.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Document = table.Column<string>(type: "nvarchar(14)", maxLength: 14, nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Street = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Number = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
@@ -69,7 +69,7 @@ namespace Entities.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Purchases",
+                name: "BuyOrders",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -82,9 +82,9 @@ namespace Entities.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Purchases", x => x.ID);
+                    table.PrimaryKey("PK_BuyOrders", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Purchases_Persons_SupplierID",
+                        name: "FK_BuyOrders_Persons_SupplierID",
                         column: x => x.SupplierID,
                         principalTable: "Persons",
                         principalColumn: "ID",
@@ -92,24 +92,21 @@ namespace Entities.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ServiceOrders",
+                name: "Vehicles",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TotalProductValue = table.Column<float>(type: "real", nullable: false),
-                    TotalLabor = table.Column<float>(type: "real", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
-                    ServiceDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CustomerID = table.Column<int>(type: "int", nullable: false)
+                    Type = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Plate = table.Column<string>(type: "nvarchar(7)", maxLength: 7, nullable: true),
+                    OwnerID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ServiceOrders", x => x.ID);
+                    table.PrimaryKey("PK_Vehicles", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_ServiceOrders_Persons_CustomerID",
-                        column: x => x.CustomerID,
+                        name: "FK_Vehicles_Persons_OwnerID",
+                        column: x => x.OwnerID,
                         principalTable: "Persons",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
@@ -130,15 +127,39 @@ namespace Entities.Migrations
                 {
                     table.PrimaryKey("PK_BuyItems", x => x.ID);
                     table.ForeignKey(
+                        name: "FK_BuyItems_BuyOrders_BuyID",
+                        column: x => x.BuyID,
+                        principalTable: "BuyOrders",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_BuyItems_Items_ItemID",
                         column: x => x.ItemID,
                         principalTable: "Items",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ServiceOrders",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TotalProductValue = table.Column<float>(type: "real", nullable: false),
+                    TotalLabor = table.Column<float>(type: "real", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
+                    ServiceDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    VehicleID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServiceOrders", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_BuyItems_Purchases_BuyID",
-                        column: x => x.BuyID,
-                        principalTable: "Purchases",
+                        name: "FK_ServiceOrders_Vehicles_VehicleID",
+                        column: x => x.VehicleID,
+                        principalTable: "Vehicles",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -182,8 +203,8 @@ namespace Entities.Migrations
                 column: "ItemID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Purchases_SupplierID",
-                table: "Purchases",
+                name: "IX_BuyOrders_SupplierID",
+                table: "BuyOrders",
                 column: "SupplierID");
 
             migrationBuilder.CreateIndex(
@@ -197,9 +218,14 @@ namespace Entities.Migrations
                 column: "ServiceOrderID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ServiceOrders_CustomerID",
+                name: "IX_ServiceOrders_VehicleID",
                 table: "ServiceOrders",
-                column: "CustomerID");
+                column: "VehicleID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vehicles_OwnerID",
+                table: "Vehicles",
+                column: "OwnerID");
         }
 
         /// <inheritdoc />
@@ -215,13 +241,16 @@ namespace Entities.Migrations
                 name: "Stocks");
 
             migrationBuilder.DropTable(
-                name: "Purchases");
+                name: "BuyOrders");
 
             migrationBuilder.DropTable(
                 name: "ServiceOrders");
 
             migrationBuilder.DropTable(
                 name: "Items");
+
+            migrationBuilder.DropTable(
+                name: "Vehicles");
 
             migrationBuilder.DropTable(
                 name: "Persons");

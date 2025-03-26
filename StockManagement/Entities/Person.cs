@@ -30,5 +30,7 @@ namespace Entities
         [StringLength(50)]
         public string? City { get; set; }
         public bool IsCustomer { get; set; }
+
+        public virtual ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
     }
 }

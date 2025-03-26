@@ -6,8 +6,6 @@ namespace ServiceContracts.DTO
     public class ItemDTO
     {
         public int ID { get; set; }
-        [StringLength(50)]
-        [Required(ErrorMessage = "A descrição do item não pode ficar em branco")]
         public string? Description { get; set; }
         public string? MeasureUnit { get; set; }
         public int MinimumStock { get; set; }

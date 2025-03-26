@@ -4,7 +4,7 @@ using ServiceContracts.DTO;
 
 namespace Services
 {
-    public class BuyOrdersService : IBuyOrderService
+    public class BuyOrdersService : IBuyOrdersService
     {
         private readonly IBuyOrderRepository _buyOrdersRepository;
 
@@ -33,7 +33,7 @@ namespace Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> RemoveBuyItem(int buyItemID, int itemID)
+        public Task<bool> RemoveBuyItem(int buyOrderID, int itemID)
         {
             throw new NotImplementedException();
         }

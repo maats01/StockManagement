@@ -15,6 +15,8 @@ namespace ServiceContracts.DTO
         public string? State { get; set; }
         public string? City { get; set; }
 
+        public List<VehicleDTO> Vehicles { get; set; } = new List<VehicleDTO>();
+
         public PersonUpdateDTO ToPersonUpdateDTO()
         {
             return new PersonUpdateDTO()
@@ -48,7 +50,8 @@ namespace ServiceContracts.DTO
                 Number = person.Number,
                 Neighborhood = person.Neighborhood,
                 State = person.State,
-                City = person.City
+                City = person.City,
+                Vehicles = person.Vehicles.Select(v => v.ToVehicleDTO()).ToList()
             };
         }
     }

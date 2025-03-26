@@ -33,6 +33,7 @@ namespace Repositories
         {
             return await _db.Persons
                 .Where(p => p.IsCustomer == true)
+                .Include(p => p.Vehicles)
                 .ToListAsync();
         }
 
@@ -43,13 +44,16 @@ namespace Repositories
 
         public async Task<List<Person>> GetPersons()
         {
-            return await _db.Persons.ToListAsync();
+            return await _db.Persons
+                .Include(p => p.Vehicles)
+                .ToListAsync();
         }
 
         public async Task<List<Person>> GetSuppliers()
         {
             return await _db.Persons
                 .Where(p => p.IsCustomer == false)
+                .Include(p => p.Vehicles)
                 .ToListAsync();
         }
 

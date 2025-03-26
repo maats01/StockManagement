@@ -10,7 +10,7 @@ namespace Entities
     {
         [Key]
         public int ID { get; set; }
-        [Range(1, 10000, ErrorMessage = "O valor unitário deve ser um número entre 1 e 10000")]
+        [Range(0.01, 10000, ErrorMessage = "O valor unitário deve ser um número entre 0.01 e 10000")]
         public float UnitValue { get; set; }
         [Range(1, 10000, ErrorMessage = "O custo deve ser um número entre 1 e 10000")]
         public int Quantity { get; set; }

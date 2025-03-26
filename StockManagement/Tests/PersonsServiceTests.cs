@@ -28,7 +28,10 @@ namespace Tests
 
         public Person BuildExamplePerson()
         {
-            return _fixture.Build<Person>().With(p => p.Email, "example@email.com").Create();
+            return _fixture.Build<Person>()
+                .With(p => p.Email, "example@email.com")
+                .With(p => p.Vehicles, null as ICollection<Vehicle>)
+                .Create();
         }
 
         #region AddPerson
@@ -99,10 +102,12 @@ namespace Tests
         {
             Person person1 = _fixture.Build<Person>()
                 .With(p => p.IsCustomer, true)
+                .With(p => p.Vehicles, null as ICollection<Vehicle>)
                 .Create();
 
             Person person2 = _fixture.Build<Person>()
                 .With(p => p.IsCustomer, true)
+                .With(p => p.Vehicles, null as ICollection<Vehicle>)
                 .Create();
 
             List<Person> expectedPersons = new List<Person>
@@ -131,10 +136,12 @@ namespace Tests
         {
             Person person1 = _fixture.Build<Person>()
                 .With(p => p.IsCustomer, false)
+                .With(p => p.Vehicles, null as ICollection<Vehicle>)
                 .Create();
 
             Person person2 = _fixture.Build<Person>()
                 .With(p => p.IsCustomer, false)
+                .With(p => p.Vehicles, null as ICollection<Vehicle>)
                 .Create();
 
             List<Person> expectedPersons = new List<Person>

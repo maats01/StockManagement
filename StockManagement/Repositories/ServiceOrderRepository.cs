@@ -59,7 +59,8 @@ namespace Repositories
         public async Task<ServiceOrder?> GetServiceOrderByID(int id)
         {
             return await _db.ServiceOrders
-                .Include(s => s.Customer)
+                .Include(s => s.Vehicle)
+                    .ThenInclude(v => v!.Owner)
                 .Include(s => s.ItemsService)
                     .ThenInclude(si => si.Item)
                 .FirstOrDefaultAsync(s => s.ID == id);
@@ -68,7 +69,8 @@ namespace Repositories
         public async Task<List<ServiceOrder>> GetServiceOrders()
         {
             return await _db.ServiceOrders
-                .Include(s => s.Customer)
+                .Include(s => s.Vehicle)
+                    .ThenInclude(v => v!.Owner)
                 .Include(s => s.ItemsService)
                     .ThenInclude(si => si.Item)
                 .ToListAsync();

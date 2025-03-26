@@ -19,9 +19,9 @@ namespace Entities
         public DateTime ServiceDate { get; set; }
         public DateTime RegistrationDate { get; set; }
 
-        public int CustomerID { get; set; }
-        [ForeignKey(nameof(CustomerID))]
-        public Person? Customer { get; set; }
+        public int VehicleID { get; set; }
+        [ForeignKey(nameof(VehicleID))]
+        public Vehicle? Vehicle { get; set; }
 
         public virtual ICollection<ServiceItem> ItemsService { get; set; } = new List<ServiceItem>();
     }
