@@ -1,4 +1,5 @@
-﻿using RepositoryContracts;
+﻿using Entities;
+using RepositoryContracts;
 using ServiceContracts;
 using ServiceContracts.DTO;
 
@@ -13,39 +14,75 @@ namespace Services
             _serviceOrderRepository = serviceOrderRepository;
         }
 
-        public Task<List<ServiceItemDTO>> AddServiceItems(List<ServiceItemCreateDTO> serviceItems)
+        public async Task AddServiceItems(List<ServiceItemCreateDTO> serviceItems)
         {
-            throw new NotImplementedException();
+            foreach (ServiceItemCreateDTO createDTO in serviceItems)
+            {
+                await _serviceOrderRepository.AddServiceOrderItem(createDTO.ToServiceItem());
+            }
         }
 
-        public Task<ServiceOrderDTO> AddServiceOrder(ServiceOrderCreateDTO serviceOrderCreateDTO)
+        public async Task<ServiceOrderDTO> AddServiceOrder(ServiceOrderCreateDTO serviceOrderCreateDTO)
         {
-            throw new NotImplementedException();
+            ServiceOrder serviceOrder = await _serviceOrderRepository.AddServiceOrder(serviceOrderCreateDTO.ToServiceOrder());
+
+            return serviceOrder.ToServiceOrderDTO();
         }
 
-        public Task<ServiceOrderDTO?> GetServiceOrderByID(int id)
+        public async Task<ServiceOrderDTO?> GetServiceOrderByID(int id)
         {
-            throw new NotImplementedException();
+            ServiceOrder? serviceOrder = await _serviceOrderRepository.GetServiceOrderByID(id);
+
+            if (serviceOrder == null)
+                return null;
+
+            return serviceOrder.ToServiceOrderDTO();
         }
 
-        public Task<List<ServiceOrderDTO>> GetServiceOrders()
+        public async Task<List<ServiceOrderDTO>> GetServiceOrders()
         {
-            throw new NotImplementedException();
+            List<ServiceOrderDTO> serviceOrders = (await _serviceOrderRepository.GetServiceOrders())
+                .Select(s => s.ToServiceOrderDTO())
+                .ToList();
+
+            return serviceOrders;
         }
 
-        public Task<bool> RemoveServiceItem(int serviceOrderID, int itemID)
+        public async Task<bool> RemoveServiceItem(int serviceOrderID, int itemID)
         {
-            throw new NotImplementedException();
+            ServiceItem? serviceItem = await _serviceOrderRepository.GetServiceItemByID(itemID, serviceOrderID);
+
+            if (serviceItem == null)
+                return false;
+
+            await _serviceOrderRepository.RemoveServiceItem(serviceItem);
+            return true;
         }
 
-        public Task<ServiceItemDTO> UpdateServiceItem(ServiceItemUpdateDTO serviceItemUpdateDTO)
+        public async Task<bool> RemoveServiceOrder(int id)
         {
-            throw new NotImplementedException();
+            ServiceOrder? serviceOrder = await _serviceOrderRepository.GetServiceOrderByID(id);
+
+            if (serviceOrder == null)
+                return false;
+
+            await _serviceOrderRepository.RemoveServiceOrder(serviceOrder);
+
+            return true;
         }
 
-        public Task<ServiceOrderDTO> UpdateServiceOrder(ServiceOrderUpdateDTO serviceOrderUpdateDTO)
+        public async Task<ServiceItemDTO> UpdateServiceItem(ServiceItemUpdateDTO serviceItemUpdateDTO)
         {
-            throw new NotImplementedException();
+            ServiceItem serviceItem = await _serviceOrderRepository.UpdateServiceItem(serviceItemUpdateDTO.ToServiceItem());
+
+            return serviceItem.ToServiceItemDTO();
+        }
+
+        public async Task<ServiceOrderDTO> UpdateServiceOrder(ServiceOrderUpdateDTO serviceOrderUpdateDTO)
+        {
+            ServiceOrder serviceOrder = await _serviceOrderRepository.UpdateServiceOrder(serviceOrderUpdateDTO.ToServiceOrder());
+
+            return serviceOrder.ToServiceOrderDTO();
         }
     }
 }

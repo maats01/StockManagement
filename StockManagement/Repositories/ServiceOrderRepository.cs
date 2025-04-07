@@ -99,5 +99,12 @@ namespace Repositories
 
             return serviceOrder;
         }
+
+        public async Task<ServiceItem?> GetServiceItemByID(int itemId, int serviceId)
+        {
+            return await _db.ServiceItems
+                .Include(s => s.Item)
+                .FirstOrDefaultAsync(s => s.ItemID == itemId && s.ServiceOrderID == serviceId);
+        }
     }
 }

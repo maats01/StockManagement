@@ -96,5 +96,12 @@ namespace Repositories
 
             return buyItem;
         }
+
+        public async Task<BuyItem?> GetBuyItemByID(int itemId, int buyId)
+        {
+            return await _db.BuyItems
+                .Include(b => b.Item)
+                .FirstOrDefaultAsync(b => b.ItemID == itemId && b.BuyID == buyId);
+        }
     }
 }

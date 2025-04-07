@@ -12,6 +12,7 @@ namespace RepositoryContracts
         Task<ServiceItem> AddServiceOrderItem(ServiceItem serviceItem);
         Task AddServiceItems(List<ServiceItem> serviceItems);
         Task<List<ServiceItem>> GetServiceItemsByServiceOrderId(int serviceOrderId);
+        Task<ServiceItem?> GetServiceItemByID(int itemId, int serviceId);
         Task<ServiceItem> UpdateServiceItem(ServiceItem serviceItem);
         Task<ServiceItem> RemoveServiceItem(ServiceItem serviceItem);
     }

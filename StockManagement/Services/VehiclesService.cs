@@ -1,4 +1,5 @@
-﻿using RepositoryContracts;
+﻿using Entities;
+using RepositoryContracts;
 using ServiceContracts;
 using ServiceContracts.DTO;
 
@@ -13,34 +14,59 @@ namespace Services
             _vehicleRepository = vehicleRepository;
         }
 
-        public Task<VehicleDTO> AddVehicle(VehicleCreateDTO vehicleCreateDTO)
+        public async Task<VehicleDTO> AddVehicle(VehicleCreateDTO vehicleCreateDTO)
         {
-            throw new NotImplementedException();
+            Vehicle vehicle = await _vehicleRepository.AddVehicle(vehicleCreateDTO.ToVehicle());
+
+            return vehicle.ToVehicleDTO();
         }
 
-        public Task<VehicleDTO?> GetVehicleByID(int id)
+        public async Task<VehicleDTO?> GetVehicleByID(int id)
         {
-            throw new NotImplementedException();
+            Vehicle? vehicle = await _vehicleRepository.GetVehicleByID(id);
+
+            if (vehicle == null)
+                return null;
+
+            return vehicle.ToVehicleDTO();
         }
 
-        public Task<VehicleDTO?> GetVehicleByPlate(string plate)
+        public async Task<VehicleDTO?> GetVehicleByPlate(string plate)
         {
-            throw new NotImplementedException();
+            Vehicle? vehicle = await _vehicleRepository.GetVehicleByPlate(plate);
+
+            if (vehicle == null)
+                return null;
+
+            return vehicle.ToVehicleDTO();
         }
 
-        public Task<List<VehicleDTO>> GetVehicles()
+        public async Task<List<VehicleDTO>> GetVehicles()
         {
-            throw new NotImplementedException();
+            List<VehicleDTO> vehicles = (await _vehicleRepository.GetVehicles())
+                .Select(v => v.ToVehicleDTO())
+                .ToList();
+
+            return vehicles;
         }
 
-        public Task<bool> RemoveVehicle(int vehicleId)
+        public async Task<bool> RemoveVehicle(int vehicleId)
         {
-            throw new NotImplementedException();
+            Vehicle? vehicle = await _vehicleRepository.GetVehicleByID(vehicleId);
+
+            if (vehicle == null)
+                return false;
+
+            await _vehicleRepository.RemoveVehicle(vehicle);
+            
+            return true;
         }
 
-        public Task<VehicleDTO> UpdateVehicle(VehicleUpdateDTO vehicleUpdateDTO)
+        public async Task<VehicleDTO> UpdateVehicle(VehicleUpdateDTO vehicleUpdateDTO)
         {
-            throw new NotImplementedException();
+            Vehicle vehicle = await _vehicleRepository.UpdateVehicle(vehicleUpdateDTO.ToVehicle());
+
+            return vehicle.ToVehicleDTO();
         }
     }
 }

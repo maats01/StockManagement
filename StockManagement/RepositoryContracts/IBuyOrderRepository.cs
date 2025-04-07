@@ -12,6 +12,7 @@ namespace RepositoryContracts
         Task<BuyItem> AddBuyItem(BuyItem buyItem);
         Task AddBuyItems(List<BuyItem> buyItems);
         Task<List<BuyItem>> GetBuyItemsByBuyOrderID(int buyId);
+        Task<BuyItem?> GetBuyItemByID(int itemId, int buyId);
         Task<BuyItem> UpdateBuyItem(BuyItem buyItem);
         Task<BuyItem> RemoveBuyItem(BuyItem buyItem);
     }

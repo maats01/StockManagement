@@ -1,4 +1,5 @@
-﻿using RepositoryContracts;
+﻿using Entities;
+using RepositoryContracts;
 using ServiceContracts;
 using ServiceContracts.DTO;
 
@@ -13,39 +14,78 @@ namespace Services
             _buyOrdersRepository = buyOrdersRepository;
         }
 
-        public Task<List<BuyItemDTO>> AddBuyItems(List<BuyItemCreateDTO> buyItems)
+        public async Task AddBuyItems(List<BuyItemCreateDTO> buyItems)
         {
-            throw new NotImplementedException();
+            foreach (BuyItemCreateDTO createDTO in buyItems)
+            {
+                await _buyOrdersRepository.AddBuyItem(createDTO.ToBuyItem());
+            }
         }
 
-        public Task<BuyOrderDTO> AddBuyOrder(BuyOrderCreateDTO buyOrderCreateDTO)
+        public async Task<BuyOrderDTO> AddBuyOrder(BuyOrderCreateDTO buyOrderCreateDTO)
         {
-            throw new NotImplementedException();
+            BuyOrder buyOrder = await _buyOrdersRepository.AddBuy(buyOrderCreateDTO.ToBuyOrder());
+
+            return buyOrder.ToBuyOrderDTO();
         }
 
-        public Task<BuyOrderDTO?> GetBuyOrderByID(int id)
+        public async Task<BuyOrderDTO?> GetBuyOrderByID(int id)
         {
-            throw new NotImplementedException();
+            BuyOrder? buyOrder = await _buyOrdersRepository.GetBuyByID(id);
+
+            if (buyOrder == null)
+            {
+                return null;
+            }
+
+            return buyOrder.ToBuyOrderDTO();
         }
 
-        public Task<List<BuyOrderDTO>> GetBuyOrders()
+        public async Task<List<BuyOrderDTO>> GetBuyOrders()
         {
-            throw new NotImplementedException();
+            List<BuyOrderDTO> buyOrders = (await _buyOrdersRepository.GetBuys())
+                .Select(b => b.ToBuyOrderDTO())
+                .ToList();
+
+            return buyOrders;
         }
 
-        public Task<bool> RemoveBuyItem(int buyOrderID, int itemID)
+        public async Task<bool> RemoveBuyItem(int buyOrderID, int itemID)
         {
-            throw new NotImplementedException();
+            BuyItem? buyItem = await _buyOrdersRepository.GetBuyItemByID(itemID, buyOrderID);
+
+            if (buyItem == null)
+                return false;
+
+            await _buyOrdersRepository.RemoveBuyItem(buyItem);
+
+            return true;
         }
 
-        public Task<BuyItemDTO> UpdateBuyItem(BuyItemUpdateDTO buyItemUpdateDTO)
+        public async Task<bool> RemoveBuyOrder(int id)
         {
-            throw new NotImplementedException();
+            BuyOrder? buyOrder = await _buyOrdersRepository.GetBuyByID(id);
+
+            if (buyOrder == null)
+                return false;
+
+            await _buyOrdersRepository.RemoveBuy(buyOrder);
+
+            return true;
         }
 
-        public Task<BuyOrderDTO> UpdateBuyOrder(BuyOrderUpdateDTO buyOrderUpdateDTO)
+        public async Task<BuyItemDTO> UpdateBuyItem(BuyItemUpdateDTO buyItemUpdateDTO)
         {
-            throw new NotImplementedException();
+            BuyItem buyItem = await _buyOrdersRepository.UpdateBuyItem(buyItemUpdateDTO.ToBuyItem());
+
+            return buyItem.ToBuyItemDTO();
+        }
+
+        public async Task<BuyOrderDTO> UpdateBuyOrder(BuyOrderUpdateDTO buyOrderUpdateDTO)
+        {
+            BuyOrder buyOrder = await _buyOrdersRepository.UpdateBuy(buyOrderUpdateDTO.ToBuyOrder());
+
+            return buyOrder.ToBuyOrderDTO();
         }
     }
 }
