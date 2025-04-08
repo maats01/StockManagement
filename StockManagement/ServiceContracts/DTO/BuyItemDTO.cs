@@ -7,7 +7,7 @@ namespace ServiceContracts.DTO
         public int ID { get; set; }
         public float UnitValue { get; set; }
         public int Quantity { get; set; }
-        public ItemDTO? Item { get; set; }
+        public StockDTO? Item { get; set; }
 
         public BuyItemUpdateDTO ToBuyItemUpdateDTO()
         {
@@ -30,7 +30,7 @@ namespace ServiceContracts.DTO
                 ID = bi.ID,
                 UnitValue = bi.UnitValue,
                 Quantity = bi.Quantity,
-                Item = bi.Item?.ToItemDTO()
+                Item = bi.Item?.ToStockDTO()
             };
         }
     }

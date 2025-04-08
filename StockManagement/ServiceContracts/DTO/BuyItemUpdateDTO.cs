@@ -12,7 +12,7 @@ namespace ServiceContracts.DTO
         public int Quantity { get; set; }
         public int BuyID { get; set; }
         public int ItemID { get; set; }
-        public ItemDTO? Item { get; set; }
+        public StockDTO? Item { get; set; }
 
         public BuyItem ToBuyItem()
         {

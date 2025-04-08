@@ -5,7 +5,6 @@ namespace Entities
     public class ApplicationDbContext : DbContext
     {
         public DbSet<Person> Persons { get; set; }
-        public DbSet<Item> Items { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<BuyOrder> BuyOrders { get; set; }
         public DbSet<ServiceOrder> ServiceOrders { get; set; }

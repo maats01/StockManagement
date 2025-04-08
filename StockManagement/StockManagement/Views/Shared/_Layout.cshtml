@@ -1,13 +1,36 @@
 ﻿<!DOCTYPE html>
-
-<html>
+<html lang="pt-br">
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Sistema de Estoque</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
 </head>
 <body>
-    <div>
+    <header class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Sistema de Estoque</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="/">Estoque</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Pessoas">Pessoas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Veiculos">Veículos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/OrdensServico">Ordens de Serviço</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/OrdensCompra">Ordens de Compra</a></li>
+                </ul>
+                <span class="navbar-text">Usuário Logado</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mt-4">
         @RenderBody()
-    </div>
+    </main>
+
+    <footer class="bg-light text-center p-3 mt-4">
+        <small>&copy; @DateTime.Now.Year - Sistema de Estoque</small>
+    </footer>
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

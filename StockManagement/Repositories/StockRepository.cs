@@ -32,14 +32,12 @@ namespace Repositories
         public async Task<Stock?> GetStockByItemID(int itemId)
         {
             return await _db.Stocks
-                .Include(s => s.Item)
-                .FirstOrDefaultAsync(s => s.ItemID == itemId);
+                .FirstOrDefaultAsync(s => s.ID == itemId);
         }
 
         public async Task<List<Stock>> GetStocks()
         {
             return await _db.Stocks
-                .Include(s => s.Item)
                 .ToListAsync();
         }
 

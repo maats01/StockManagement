@@ -12,22 +12,6 @@ namespace Entities.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Items",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    MeasureUnit = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
-                    MinimumStock = table.Column<int>(type: "int", nullable: false),
-                    MaximumStock = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Items", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Persons",
                 columns: table => new
                 {
@@ -53,19 +37,18 @@ namespace Entities.Migrations
                 name: "Stocks",
                 columns: table => new
                 {
-                    ItemID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    MeasureUnit = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
+                    MinimumStock = table.Column<int>(type: "int", nullable: false),
+                    MaximumStock = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Cost = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Stocks", x => x.ItemID);
-                    table.ForeignKey(
-                        name: "FK_Stocks_Items_ItemID",
-                        column: x => x.ItemID,
-                        principalTable: "Items",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_Stocks", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -133,9 +116,9 @@ namespace Entities.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BuyItems_Items_ItemID",
+                        name: "FK_BuyItems_Stocks_ItemID",
                         column: x => x.ItemID,
-                        principalTable: "Items",
+                        principalTable: "Stocks",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -179,15 +162,15 @@ namespace Entities.Migrations
                 {
                     table.PrimaryKey("PK_ServiceItems", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_ServiceItems_Items_ItemID",
-                        column: x => x.ItemID,
-                        principalTable: "Items",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_ServiceItems_ServiceOrders_ServiceOrderID",
                         column: x => x.ServiceOrderID,
                         principalTable: "ServiceOrders",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ServiceItems_Stocks_ItemID",
+                        column: x => x.ItemID,
+                        principalTable: "Stocks",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -238,16 +221,13 @@ namespace Entities.Migrations
                 name: "ServiceItems");
 
             migrationBuilder.DropTable(
-                name: "Stocks");
-
-            migrationBuilder.DropTable(
                 name: "BuyOrders");
 
             migrationBuilder.DropTable(
                 name: "ServiceOrders");
 
             migrationBuilder.DropTable(
-                name: "Items");
+                name: "Stocks");
 
             migrationBuilder.DropTable(
                 name: "Vehicles");

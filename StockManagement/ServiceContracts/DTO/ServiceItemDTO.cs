@@ -7,7 +7,7 @@ namespace ServiceContracts.DTO
         public int ID { get; set; }
         public float UnitValue { get; set; }
         public int Quantity { get; set; }
-        public Item? Item { get; set; }
+        public StockDTO? Item { get; set; }
     }
 
     public static class ExtensionMethodsForServiceItem
@@ -19,7 +19,7 @@ namespace ServiceContracts.DTO
                 ID = si.ID,
                 UnitValue = si.UnitValue,
                 Quantity = si.Quantity,
-                Item = si.Item
+                Item = si.Item?.ToStockDTO()
             };
         }
     }

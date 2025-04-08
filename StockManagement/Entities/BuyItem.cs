@@ -21,6 +21,6 @@ namespace Entities
 
         public int ItemID { get; set; }
         [ForeignKey(nameof(ItemID))]
-        public Item? Item { get; set; }
+        public Stock? Item { get; set; }
     }
 }

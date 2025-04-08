@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entities.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250326173314_Initial")]
+    [Migration("20250408210929_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -83,34 +83,6 @@ namespace Entities.Migrations
                     b.HasIndex("SupplierID");
 
                     b.ToTable("BuyOrders");
-                });
-
-            modelBuilder.Entity("Entities.Item", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("MaximumStock")
-                        .HasColumnType("int");
-
-                    b.Property<string>("MeasureUnit")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
-                    b.Property<int>("MinimumStock")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("Entities.Person", b =>
@@ -232,16 +204,34 @@ namespace Entities.Migrations
 
             modelBuilder.Entity("Entities.Stock", b =>
                 {
-                    b.Property<int>("ItemID")
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<float>("Cost")
                         .HasColumnType("real");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("MaximumStock")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MeasureUnit")
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.Property<int>("MinimumStock")
+                        .HasColumnType("int");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("ItemID");
+                    b.HasKey("ID");
 
                     b.ToTable("Stocks");
                 });
@@ -280,7 +270,7 @@ namespace Entities.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.Item", "Item")
+                    b.HasOne("Entities.Stock", "Item")
                         .WithMany()
                         .HasForeignKey("ItemID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -304,7 +294,7 @@ namespace Entities.Migrations
 
             modelBuilder.Entity("Entities.ServiceItem", b =>
                 {
-                    b.HasOne("Entities.Item", "Item")
+                    b.HasOne("Entities.Stock", "Item")
                         .WithMany()
                         .HasForeignKey("ItemID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -330,17 +320,6 @@ namespace Entities.Migrations
                         .IsRequired();
 
                     b.Navigation("Vehicle");
-                });
-
-            modelBuilder.Entity("Entities.Stock", b =>
-                {
-                    b.HasOne("Entities.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("Entities.Vehicle", b =>

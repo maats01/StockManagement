@@ -5,7 +5,7 @@ using RepositoryContracts;
 
 namespace Repositories
 {
-    class ServiceOrderRepository : IServiceOrderRepository
+    public class ServiceOrderRepository : IServiceOrderRepository
     {
         private readonly ApplicationDbContext _db;
 
