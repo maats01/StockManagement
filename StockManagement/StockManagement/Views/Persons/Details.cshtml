@@ -1,0 +1,46 @@
+﻿@model PersonDTO
+
+@{
+    ViewData["Title"] = "Detalhes da Pessoa";
+}
+
+<h2>Detalhes da Pessoa</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">ID</dt>
+            <dd class="col-sm-9">@Model.ID</dd>
+
+            <dt class="col-sm-3">Nome</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+
+            <dt class="col-sm-3">CPF/CNPJ</dt>
+            <dd class="col-sm-9">@Model.Document</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Endereço</dt>
+            <dd class="col-sm-9">@Model.Street, @Model.Number</dd>
+
+            <dt class="col-sm-3">Bairro</dt>
+            <dd class="col-sm-9">@Model.Neighborhood</dd>
+
+            <dt class="col-sm-3">Telefone</dt>
+            <dd class="col-sm-9">@Model.Phone</dd>
+
+            <dt class="col-sm-3">Estado</dt>
+            <dd class="col-sm-9">@Model.State</dd>
+
+            <dt class="col-sm-3">Cidade</dt>
+            <dd class="col-sm-9">@Model.City</dd>
+
+            <dt class="col-sm-3">Tipo</dt>
+            <dd class="col-sm-9">@Model.Type</dd>
+        </dl>
+    </div>
+</div>
+
+<a asp-controller="Persons" asp-action="Edit" asp-route-ID="@Model.ID" class="btn btn-warning">Editar</a>
+<a asp-controller="Persons" asp-action="Index" class="btn btn-secondary">Voltar</a>

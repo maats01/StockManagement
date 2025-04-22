@@ -36,5 +36,6 @@ namespace ServiceContracts
         /// <param name="itemID">ID to search</param>
         /// <returns>True if removed; false otherwise</returns>
         Task<bool> RemoveStock(int itemID);
+        Task<List<StockDTO>> GetFilteredStocks(string searchBy, string searchString);
     }
 }

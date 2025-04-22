@@ -1,6 +1,5 @@
 ﻿using Entities;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
 
 namespace ServiceContracts.DTO
 {
@@ -17,6 +16,7 @@ namespace ServiceContracts.DTO
         public string? Neighborhood { get; set; }
         public string? State { get; set; }
         public string? City { get; set; }
+        public bool IsCustomer { get; set; }
 
         public Person ToPerson()
         {
@@ -30,7 +30,8 @@ namespace ServiceContracts.DTO
                 Number = Number,
                 Neighborhood = Neighborhood,
                 State = State,
-                City = City
+                City = City,
+                IsCustomer = IsCustomer
             };
         }
     }

@@ -47,5 +47,6 @@ namespace ServiceContracts
         /// <returns>True if the person was removed correctly; if not, 
         /// returns False</returns>
         Task<bool> RemovePerson(int id);
+        Task<List<PersonDTO>> GetFilteredPersons(string searchBy, string searchString);
     }
 }

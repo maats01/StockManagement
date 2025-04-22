@@ -1,0 +1,34 @@
+﻿@model VehicleDTO
+
+@{
+    ViewData["Title"] = "Detalhes do veículo";
+}
+
+<h2>Detalhes do veículo</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">ID</dt>
+            <dd class="col-sm-9">@Model.ID</dd>
+
+            <dt class="col-sm-3">Marca/Modelo</dt>
+            <dd class="col-sm-9">@Model.Type</dd>
+
+            <dt class="col-sm-3">Placa</dt>
+            <dd class="col-sm-9">@Model.Plate</dd>
+
+            <dt class="col-sm-3">Proprietário</dt>
+            <dd class="col-sm-9">@Model.Owner.Name</dd>
+
+            <dt class="col-sm-3">Estado</dt>
+            <dd class="col-sm-9">@Model.Owner.State</dd>
+
+            <dt class="col-sm-3">Cidade</dt>
+            <dd class="col-sm-9">@Model.Owner.City</dd>
+        </dl>
+    </div>
+</div>
+
+<a asp-controller="Vehicles" asp-action="Edit" asp-route-ID="@Model.ID" class="btn btn-warning">Editar</a>
+<a asp-controller="Vehicles" asp-action="Index" class="btn btn-secondary">Voltar</a>

@@ -1,0 +1,40 @@
+﻿@model StockDTO
+
+@{
+    ViewData["Title"] = "Detalhes do estoque";
+}
+
+<h2>Detalhes do estoque</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">ID</dt>
+            <dd class="col-sm-9">@Model.ID</dd>
+
+            <dt class="col-sm-3">Descrição</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+
+            <dt class="col-sm-3">Unidade de medida</dt>
+            <dd class="col-sm-9">@Model.MeasureUnit</dd>
+
+            <dt class="col-sm-3">Estoque mínimo</dt>
+            <dd class="col-sm-9">@Model.MinimumStock</dd>
+
+            <dt class="col-sm-3">Estoque máximo</dt>
+            <dd class="col-sm-9">@Model.MaximumStock</dd>
+
+            <dt class="col-sm-3">Quantidade</dt>
+            <dd class="col-sm-9">@Model.Quantity</dd>
+
+            <dt class="col-sm-3">Valor unitário</dt>
+            <dd class="col-sm-9">R$ @Model.Cost</dd>
+
+            <dt class="col-sm-3">Valor total</dt>
+            <dd class="col-sm-9">R$ @Model.Total</dd>
+        </dl>
+    </div>
+</div>
+
+<a asp-controller="Stocks" asp-action="Edit" asp-route-ID="@Model.ID" class="btn btn-warning">Editar</a>
+<a asp-controller="Stocks" asp-action="Index" class="btn btn-secondary">Voltar</a>

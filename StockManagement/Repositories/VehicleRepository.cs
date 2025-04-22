@@ -1,6 +1,7 @@
 ﻿using Entities;
 using Microsoft.EntityFrameworkCore;
 using RepositoryContracts;
+using System.Linq.Expressions;
 
 namespace Repositories
 {
@@ -23,7 +24,9 @@ namespace Repositories
 
         public async Task<Vehicle?> GetVehicleByID(int id)
         {
-            return await _db.Vehicles.FirstOrDefaultAsync(v => v.ID == id);
+            return await _db.Vehicles
+                .Include(v => v.Owner)
+                .FirstOrDefaultAsync(v => v.ID == id);
         }
 
         public async Task<Vehicle?> GetVehicleByPlate(string plate)
@@ -33,7 +36,17 @@ namespace Repositories
 
         public async Task<List<Vehicle>> GetVehicles()
         {
-            return await _db.Vehicles.ToListAsync();
+            return await _db.Vehicles
+                .Include(v => v.Owner)
+                .ToListAsync();
+        }
+
+        public async Task<List<Vehicle>> GetFilteredVehicles(Expression<Func<Vehicle, bool>> predicate)
+        {
+            return await _db.Vehicles
+                .Where(predicate)
+                .Include(v => v.Owner)
+                .ToListAsync();
         }
 
         public async Task<Vehicle> RemoveVehicle(Vehicle vehicle)
@@ -46,7 +59,12 @@ namespace Repositories
 
         public async Task<Vehicle> UpdateVehicle(Vehicle vehicle)
         {
-            _db.Vehicles.Update(vehicle);
+            Vehicle existing = await _db.Vehicles.FirstAsync(v => v.ID == vehicle.ID);
+
+            existing.Plate = vehicle.Plate;
+            existing.OwnerID = vehicle.OwnerID;
+            existing.Type = vehicle.Type;
+
             await _db.SaveChangesAsync();
 
             return vehicle;

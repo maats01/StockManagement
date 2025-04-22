@@ -1,0 +1,86 @@
+﻿@model VehicleUpdateDTO
+
+@{
+    ViewData["Title"] = "Atualizando Veículo";
+}
+
+<h2>Atualizando Veículo</h2>
+
+<form asp-controller="Vehicles" asp-action="Edit" method="post">
+    <div class="mb-3">
+        <label asp-for="Type" class="form-label">Marca/Modelo</label>
+        <input asp-for="Type" class="form-control" />
+        <span asp-validation-for="Type" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Plate" class="form-label">Placa</label>
+        <input asp-for="Plate" class="form-control" />
+        <span asp-validation-for="Plate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3 position-relative">
+        <label for="personSearch" class="form-label">Proprietário</label>
+        <input id="personSearch" type="text" class="form-control" placeholder="Buscar pessoas" autocomplete="off" value="@Model.Owner?.Name"/>
+
+        <input type="hidden" name="OwnerID" id="OwnerID" value="@Model.OwnerID"/>
+
+        <div id="searchResults" class="list-group position-absolute w-100" style="z-index: 1000;"></div>
+    </div>
+
+
+    <button type="submit" class="btn btn-success">Salvar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+<script>
+    const input = document.getElementById("personSearch");
+    const resultsDiv = document.getElementById("searchResults");
+    const hiddenInput = document.getElementById("OwnerID");
+
+    input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+
+            const termo = input.value.trim();
+            if (!termo) return;
+
+            fetch(`/api/Persons/get?substring=${encodeURIComponent(termo)}`)
+                .then(res => res.json())
+                .then(data => {
+                    resultsDiv.innerHTML = "";
+                    if (data.length === 0) {
+                        const noResult = document.createElement("div");
+                        noResult.className = "list-group-item list-group-item-secondary";
+                        noResult.textContent = "Nenhuma pessoa encontrada";
+                        resultsDiv.appendChild(noResult);
+                        return;
+                    }
+
+                    data.forEach(p => {
+                        const item = document.createElement("button");
+                        item.type = "button";
+                        item.className = "list-group-item list-group-item-action";
+                        item.textContent = p.name;
+                        item.addEventListener("click", () => {
+                            input.value = p.name;
+                            hiddenInput.value = p.id;
+                            resultsDiv.innerHTML = "";
+                        });
+                        resultsDiv.appendChild(item);
+                    });
+                })
+                .catch(err => {
+                    console.error(err);
+                    resultsDiv.innerHTML = "";
+                });
+        }
+    });
+
+    // Fecha o dropdown se clicar fora
+    document.addEventListener("click", function (e) {
+        if (!input.contains(e.target) && !resultsDiv.contains(e.target)) {
+            resultsDiv.innerHTML = "";
+        }
+    });
+</script>

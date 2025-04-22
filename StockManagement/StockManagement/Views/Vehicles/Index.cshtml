@@ -1,41 +1,43 @@
-﻿@model ICollection<StockDTO>
+﻿@model ICollection<VehicleDTO>
 @{
-    ViewData["Title"] = "Estoque";
+    ViewData["Title"] = "Veículos";
 }
 
-<h2>Estoque Atual</h2>
+<h2>Veículos</h2>
 
-<a asp-controller="Stocks" asp-action="Create" class="btn btn-primary mb-3">+ Novo Item</a>
+<a asp-controller="Vehicles" asp-action="Create" class="btn btn-primary mb-3">+ Novo veículo</a>
 
 <table class="table table-striped table-bordered">
     <thead class="table-dark">
         <tr>
             <th>ID</th>
-            <th>Descrição</th>
-            <th>Quantidade</th>
-            <th>Valor unitário</th>
-            <th>Valor total</th>
+            <th>Tipo</th>
+            <th>Placa</th>
+            <th>Proprietário</th>
+            <th>Estado</th>
+            <th>Cidade</th>
             <th>Ações</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (StockDTO item in Model)
+        @foreach (VehicleDTO vehicle in Model)
         {
             <tr>
-                <td>@item.ID</td>
-                <td>@item.Description</td>
-                <td>@item.Quantity</td>
-                <td>@item.Cost.ToString("C")</td>
-                <td>@item.Total.ToString("C")</td>
+                <td>@vehicle.ID</td>
+                <td>@vehicle.Type</td>
+                <td>@vehicle.Plate</td>
+                <td>@vehicle.Owner.Name</td>
+                <td>@vehicle.Owner.State</td>
+                <td>@vehicle.Owner.City</td>
                 <td>
-                    <a class="btn btn-sm btn-info" asp-controller="Stocks" asp-action="Details" asp-route-ID="@item.ID">Detalhes</a>
-                    <a class="btn btn-sm btn-warning" asp-controller="Stocks" asp-action="Edit" asp-route-ID="@item.ID">Editar</a>
-                    
+                    <a class="btn btn-sm btn-info" asp-controller="Vehicles" asp-action="Details" asp-route-ID="@vehicle.ID">Detalhes</a>
+                    <a class="btn btn-sm btn-warning" asp-controller="Vehicles" asp-action="Edit" asp-route-ID="@vehicle.ID">Editar</a>
+
                     <button type="button"
                             class="btn btn-sm btn-danger"
                             data-bs-toggle="modal"
                             data-bs-target="#confirmDeleteModal"
-                            onclick="setDeleteId(@item.ID)">
+                            onclick="setDeleteId(@vehicle.ID)">
                         Excluir
                     </button>
 
@@ -53,10 +55,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
-                Tem certeza de que deseja excluir este item?
+                Tem certeza de que deseja excluir esta pessoa?
             </div>
             <div class="modal-footer">
-                <form asp-controller="Stocks" asp-action="Delete" id="deleteForm" method="post">
+                <form asp-controller="Vehicles" asp-action="Delete" id="deleteForm" method="post">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-danger">Excluir</button>
                 </form>
@@ -69,7 +71,7 @@
     <script>
         function setDeleteId(id) {
             const form = document.getElementById("deleteForm");
-            form.action = `/Stocks/Delete/${id}`;
+            form.action = `/Vehicles/Delete/${id}`;
         }
     </script>
 }

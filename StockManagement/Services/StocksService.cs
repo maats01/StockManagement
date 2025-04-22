@@ -21,6 +21,19 @@ namespace Services
             return stock.ToStockDTO();
         }
 
+        public async Task<List<StockDTO>> GetFilteredStocks(string searchBy, string searchString)
+        {
+            List<Stock> stocks = searchBy switch
+            {
+                nameof(Stock.Description) => await _stocksRepository.GetFilteredStocks(s =>
+                s.Description.Contains(searchString)),
+
+                _ => await _stocksRepository.GetStocks()
+            };
+
+            return stocks.Select(s => s.ToStockDTO()).ToList();
+        }
+
         public async Task<StockDTO?> GetStockByItemID(int itemID)
         {
             Stock? stock = await _stocksRepository.GetStockByItemID(itemID);

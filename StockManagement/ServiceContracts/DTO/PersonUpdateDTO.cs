@@ -17,6 +17,7 @@ namespace ServiceContracts.DTO
         public string? Neighborhood { get; set; }
         public string? State { get; set; }
         public string? City { get; set; }
+        public bool IsCustomer { get; set; }
 
         public Person ToPerson()
         {
@@ -31,7 +32,8 @@ namespace ServiceContracts.DTO
                 Number = Number,
                 Neighborhood = Neighborhood,
                 State = State,
-                City = City
+                City = City,
+                IsCustomer = IsCustomer
             };
         }
     }

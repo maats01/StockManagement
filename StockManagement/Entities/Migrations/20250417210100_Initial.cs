@@ -131,7 +131,7 @@ namespace Entities.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TotalProductValue = table.Column<float>(type: "real", nullable: false),
                     TotalLabor = table.Column<float>(type: "real", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     ServiceDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     VehicleID = table.Column<int>(type: "int", nullable: false)

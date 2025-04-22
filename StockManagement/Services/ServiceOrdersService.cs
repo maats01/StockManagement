@@ -26,6 +26,18 @@ namespace Services
         {
             ServiceOrder serviceOrder = await _serviceOrderRepository.AddServiceOrder(serviceOrderCreateDTO.ToServiceOrder());
 
+            if (serviceOrderCreateDTO.ItemsService.Count != 0)
+            {
+                List<ServiceItem> serviceItems = serviceOrderCreateDTO.ItemsService.Select(si => si.ToServiceItem()).ToList();
+
+                foreach (ServiceItem serviceItem in serviceItems)
+                {
+                    serviceItem.ServiceOrderID = serviceOrder.ID;
+                }
+
+                await _serviceOrderRepository.AddServiceItems(serviceItems);
+            }
+
             return serviceOrder.ToServiceOrderDTO();
         }
 
@@ -81,6 +93,18 @@ namespace Services
         public async Task<ServiceOrderDTO> UpdateServiceOrder(ServiceOrderUpdateDTO serviceOrderUpdateDTO)
         {
             ServiceOrder serviceOrder = await _serviceOrderRepository.UpdateServiceOrder(serviceOrderUpdateDTO.ToServiceOrder());
+
+            if (serviceOrderUpdateDTO.ServiceItems.Count > 0)
+            {
+                List<ServiceItem> serviceItems = serviceOrderUpdateDTO.ServiceItems.Select(si => si.ToServiceItem()).ToList();
+
+                foreach (ServiceItem serviceItem in serviceItems)
+                {
+                    serviceItem.ServiceOrderID = serviceOrderUpdateDTO.ID;
+
+                    await _serviceOrderRepository.UpdateServiceItem(serviceItem);
+                }
+            }
 
             return serviceOrder.ToServiceOrderDTO();
         }

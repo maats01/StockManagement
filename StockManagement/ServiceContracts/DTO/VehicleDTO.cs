@@ -8,7 +8,6 @@ namespace ServiceContracts.DTO
         public string? Type { get; set; }
         public string? Plate { get; set; }
         public required PersonDTO Owner { get; set; }
-        public List<ServiceOrderDTO> ServiceOrders { get; set; } = new List<ServiceOrderDTO>();
 
         public VehicleUpdateDTO ToUpdateDTO()
         {
@@ -32,8 +31,7 @@ namespace ServiceContracts.DTO
                 ID = vehicle.ID,
                 Type = vehicle.Type,
                 Plate = vehicle.Plate,
-                Owner = vehicle.Owner!.ToPersonDTO(),
-                ServiceOrders = vehicle.ServiceOrders.Select(so => so.ToServiceOrderDTO()).ToList()
+                Owner = vehicle.Owner?.ToPersonDTO()
             };
         }
     }

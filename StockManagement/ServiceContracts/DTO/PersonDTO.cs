@@ -14,6 +14,7 @@ namespace ServiceContracts.DTO
         public string? Neighborhood { get; set; }
         public string? State { get; set; }
         public string? City { get; set; }
+        public string? Type { get; set; }
 
         public List<VehicleDTO> Vehicles { get; set; } = new List<VehicleDTO>();
 
@@ -30,7 +31,8 @@ namespace ServiceContracts.DTO
                 Number = Number,
                 Neighborhood = Neighborhood,
                 State = State,
-                City = City
+                City = City,
+                IsCustomer = Type == "Cliente" ? true : false
             };
         }
     }
@@ -51,7 +53,7 @@ namespace ServiceContracts.DTO
                 Neighborhood = person.Neighborhood,
                 State = person.State,
                 City = person.City,
-                Vehicles = person.Vehicles.Select(v => v.ToVehicleDTO()).ToList()
+                Type = person.IsCustomer ? "Cliente" : "Fornecedor"
             };
         }
     }

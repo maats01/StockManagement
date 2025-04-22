@@ -1,0 +1,81 @@
+﻿@model ICollection<ServiceOrderDTO>
+@{
+    ViewData["Title"] = "Ordens de serviço";
+}
+
+<h2>Ordens de serviço</h2>
+
+<a asp-controller="ServiceOrders" asp-action="Create" class="btn btn-primary mb-3">+ Novo serviço</a>
+
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Data do serviço</th>
+            <th>Data de registro</th>
+            <th>Veículo</th>
+            <th>Proprietário</th>
+            <th>Valor de produto</th>
+            <th>Mão de obra</th>
+            <th>Total</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (ServiceOrderDTO serviceOrder in Model)
+        {
+            <tr>
+                <td>@serviceOrder.ID</td>
+                <td>@serviceOrder.ServiceDate</td>
+                <td>@serviceOrder.RegistrationDate</td>
+                <td>@serviceOrder.Vehicle?.Plate</td>
+                <td>@serviceOrder.Vehicle?.Owner?.Name</td>
+                <td>@serviceOrder.TotalProductValue</td>
+                <td>@serviceOrder.TotalLabor</td>
+                <td>@(serviceOrder.TotalProductValue + serviceOrder.TotalLabor)</td>
+                <td>
+                    <a class="btn btn-sm btn-info" asp-controller="ServiceOrders" asp-action="Details" asp-route-ID="@serviceOrder.ID">Detalhes</a>
+                    <a class="btn btn-sm btn-warning" asp-controller="ServiceOrders" asp-action="Edit" asp-route-ID="@serviceOrder.ID">Editar</a>
+
+                    <button type="button"
+                            class="btn btn-sm btn-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#confirmDeleteModal"
+                            onclick="setDeleteId(@serviceOrder.ID)">
+                        Excluir
+                    </button>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                Tem certeza de que deseja excluir esta ordem de serviço?
+            </div>
+            <div class="modal-footer">
+                <form asp-controller="ServiceOrders" asp-action="Delete" id="deleteForm" method="post">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function setDeleteId(id) {
+            const form = document.getElementById("deleteForm");
+            form.action = `/ServiceOrders/Delete/${id}`;
+        }
+    </script>
+}

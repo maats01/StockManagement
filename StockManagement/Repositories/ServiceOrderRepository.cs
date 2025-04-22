@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using RepositoryContracts;
+using System.Linq.Expressions;
 
 namespace Repositories
 {
@@ -61,7 +62,7 @@ namespace Repositories
             return await _db.ServiceOrders
                 .Include(s => s.Vehicle)
                     .ThenInclude(v => v!.Owner)
-                .Include(s => s.ItemsService)
+                .Include(s => s.ServiceItems)
                     .ThenInclude(si => si.Item)
                 .FirstOrDefaultAsync(s => s.ID == id);
         }
@@ -71,8 +72,17 @@ namespace Repositories
             return await _db.ServiceOrders
                 .Include(s => s.Vehicle)
                     .ThenInclude(v => v!.Owner)
-                .Include(s => s.ItemsService)
+                .Include(s => s.ServiceItems)
                     .ThenInclude(si => si.Item)
+                .ToListAsync();
+        }
+
+        public async Task<List<ServiceOrder>> GetFilteredServiceOrders(Expression<Func<ServiceOrder, bool>> predicate)
+        {
+            return await _db.ServiceOrders
+                .Include(s => s.Vehicle)
+                    .ThenInclude(v => v.Owner)
+                .Where(predicate)
                 .ToListAsync();
         }
 
@@ -86,7 +96,20 @@ namespace Repositories
 
         public async Task<ServiceItem> UpdateServiceItem(ServiceItem serviceItem)
         {
-            _db.ServiceItems.Update(serviceItem);
+            ServiceItem? matching = await _db.ServiceItems.FirstOrDefaultAsync(si => si.ItemID == serviceItem.ItemID && si.ServiceOrderID == serviceItem.ServiceOrderID);
+
+            if (matching == null)
+            {
+                _db.ServiceItems.Add(serviceItem);
+                await _db.SaveChangesAsync();
+            }
+
+            matching = await _db.ServiceItems.FirstAsync(si => si.ItemID == serviceItem.ItemID && si.ServiceOrderID == serviceItem.ServiceOrderID);
+
+            matching.Quantity = serviceItem.Quantity;
+            matching.UnitValue = serviceItem.UnitValue;
+            matching.ItemID = serviceItem.ItemID;
+
             await _db.SaveChangesAsync();
 
             return serviceItem;
@@ -94,7 +117,14 @@ namespace Repositories
 
         public async Task<ServiceOrder> UpdateServiceOrder(ServiceOrder serviceOrder)
         {
-            _db.ServiceOrders.Update(serviceOrder);
+            ServiceOrder matching = await _db.ServiceOrders.FirstAsync(so => so.ID == serviceOrder.ID);
+
+            matching.ServiceDate = serviceOrder.ServiceDate;
+            matching.TotalLabor = serviceOrder.TotalLabor;
+            matching.TotalProductValue = serviceOrder.TotalProductValue;
+            matching.Description = serviceOrder.Description;
+            matching.VehicleID = serviceOrder.VehicleID;
+
             await _db.SaveChangesAsync();
 
             return serviceOrder;

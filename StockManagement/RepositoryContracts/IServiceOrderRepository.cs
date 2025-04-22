@@ -1,4 +1,5 @@
 ﻿using Entities;
+using System.Linq.Expressions;
 
 namespace RepositoryContracts
 {
@@ -7,6 +8,7 @@ namespace RepositoryContracts
         Task<ServiceOrder> AddServiceOrder(ServiceOrder serviceOrder);
         Task<ServiceOrder> UpdateServiceOrder(ServiceOrder serviceOrder);
         Task<List<ServiceOrder>> GetServiceOrders();
+        Task<List<ServiceOrder>> GetFilteredServiceOrders(Expression<Func<ServiceOrder, bool>> predicate);
         Task<ServiceOrder?> GetServiceOrderByID(int id);
         Task<ServiceOrder> RemoveServiceOrder(ServiceOrder serviceOrder);
         Task<ServiceItem> AddServiceOrderItem(ServiceItem serviceItem);

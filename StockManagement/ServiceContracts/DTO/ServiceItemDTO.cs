@@ -8,6 +8,17 @@ namespace ServiceContracts.DTO
         public float UnitValue { get; set; }
         public int Quantity { get; set; }
         public StockDTO? Item { get; set; }
+
+        public ServiceItemUpdateDTO ToServiceItemUpdateDTO()
+        {
+            return new ServiceItemUpdateDTO()
+            {
+                ID = ID,
+                UnitValue = UnitValue,
+                Quantity = Quantity,
+                Item = Item
+            };
+        }
     }
 
     public static class ExtensionMethodsForServiceItem

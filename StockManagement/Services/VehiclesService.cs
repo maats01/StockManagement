@@ -21,6 +21,24 @@ namespace Services
             return vehicle.ToVehicleDTO();
         }
 
+        public async Task<List<VehicleDTO>> GetFilteredVehicles(string searchBy, string searchString)
+        {
+            List<Vehicle> vehicles = searchBy switch
+            {
+                nameof(Vehicle.Type) =>
+                    await _vehicleRepository.GetFilteredVehicles(v =>
+                    v.Type.Contains(searchString)),
+
+                nameof(Vehicle.Plate) =>
+                    await _vehicleRepository.GetFilteredVehicles(v =>
+                    v.Plate.Contains(searchString)),
+
+                _ => await _vehicleRepository.GetVehicles()
+            };
+
+            return vehicles.Select(v => v.ToVehicleDTO()).ToList();
+        }
+
         public async Task<VehicleDTO?> GetVehicleByID(int id)
         {
             Vehicle? vehicle = await _vehicleRepository.GetVehicleByID(id);

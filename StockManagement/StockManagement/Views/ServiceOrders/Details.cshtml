@@ -1,0 +1,70 @@
+﻿@model ServiceOrderDTO
+
+@{
+    ViewData["Title"] = "Detalhes da Ordem de Serviço";
+}
+
+<h2>Detalhes da Ordem de Serviço</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">ID</dt>
+            <dd class="col-sm-9">@Model.ID</dd>
+
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+
+            <dt class="col-sm-3">Data do Serviço</dt>
+            <dd class="col-sm-9">@Model.ServiceDate.ToString("dd/MM/yyyy")</dd>
+
+            <dt class="col-sm-3">Data de Registro</dt>
+            <dd class="col-sm-9">@Model.RegistrationDate.ToString("dd/MM/yyyy")</dd>
+
+            <dt class="col-sm-3">Total Produtos</dt>
+            <dd class="col-sm-9">R$ @Model.TotalProductValue.ToString("F2")</dd>
+
+            <dt class="col-sm-3">Total Mão de Obra</dt>
+            <dd class="col-sm-9">R$ @Model.TotalLabor.ToString("F2")</dd>
+
+            @if (Model.Vehicle != null)
+            {
+                <dt class="col-sm-3">Veículo</dt>
+                <dd class="col-sm-9">@Model.Vehicle.Type - Placa: @Model.Vehicle.Plate</dd>
+
+                <dt class="col-sm-3">Proprietário</dt>
+                <dd class="col-sm-9">@Model.Vehicle.Owner.Name</dd>
+            }
+        </dl>
+    </div>
+</div>
+
+@if (Model.ServiceItems.Any())
+{
+    <h4>Itens de Serviço</h4>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Item</th>
+                <th>Quantidade</th>
+                <th>Valor Unitário</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ServiceItems)
+            {
+                var total = (item.Quantity * item.UnitValue).ToString("F2");
+                <tr>
+                    <td>@item.Item?.Description</td>
+                    <td>@item.Quantity</td>
+                    <td>R$ @item.UnitValue.ToString("F2")</td>
+                    <td>R$ @total</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a asp-controller="ServiceOrders" asp-action="Edit" asp-route-ID="@Model.ID" class="btn btn-warning">Editar</a>
+<a asp-controller="ServiceOrders" asp-action="Index" class="btn btn-secondary">Voltar</a>

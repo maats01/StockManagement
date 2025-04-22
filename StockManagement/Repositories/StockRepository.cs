@@ -1,6 +1,7 @@
 ﻿using Entities;
 using Microsoft.EntityFrameworkCore;
 using RepositoryContracts;
+using System.Linq.Expressions;
 
 namespace Repositories
 {
@@ -41,9 +42,24 @@ namespace Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<Stock>> GetFilteredStocks(Expression<Func<Stock, bool>> predicate)
+        {
+            return await _db.Stocks
+                .Where(predicate)
+                .ToListAsync();
+        }
+
         public async Task<Stock> UpdateStock(Stock stock)
         {
-            _db.Stocks.Update(stock);
+            Stock existing = await _db.Stocks.FirstAsync(s => s.ID == stock.ID);
+
+            existing.Description = stock.Description;
+            existing.MinimumStock = stock.MinimumStock;
+            existing.MaximumStock = stock.MaximumStock;
+            existing.MeasureUnit = stock.MeasureUnit;
+            existing.Quantity = stock.Quantity;
+            existing.Cost = stock.Cost;
+
             await _db.SaveChangesAsync();
 
             return stock;

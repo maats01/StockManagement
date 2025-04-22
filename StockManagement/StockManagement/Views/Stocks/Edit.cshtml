@@ -1,12 +1,12 @@
-﻿@model StockCreateDTO
+﻿@model StockUpdateDTO
 
 @{
-    ViewData["Title"] = "Novo Item de Estoque";
+    ViewData["Title"] = "Atualizando item";
 }
 
-<h2>Novo Item de Estoque</h2>
+<h2>Atualizando item</h2>
 
-<form asp-controller="Stocks" asp-action="Create" method="post">
+<form asp-action="Edit" method="post">
     <div class="mb-3">
         <label asp-for="Description" class="form-label">Descrição</label>
         <input asp-for="Description" class="form-control" />

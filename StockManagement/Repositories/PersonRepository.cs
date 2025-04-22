@@ -1,6 +1,7 @@
 ﻿using Entities;
 using Microsoft.EntityFrameworkCore;
 using RepositoryContracts;
+using System.Linq.Expressions;
 
 namespace Repositories
 {
@@ -49,6 +50,13 @@ namespace Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<Person>> GetFilteredPersons(Expression<Func<Person, bool>> predicate)
+        {
+            return await _db.Persons
+                .Where(predicate)
+                .ToListAsync();
+        }
+
         public async Task<List<Person>> GetSuppliers()
         {
             return await _db.Persons
@@ -59,7 +67,19 @@ namespace Repositories
 
         public async Task<Person> UpdatePerson(Person person)
         {
-            _db.Persons.Update(person);
+            Person existing = await _db.Persons.FirstAsync(p => p.ID == person.ID);
+
+            existing.Name = person.Name;
+            existing.Phone = person.Phone;
+            existing.Document = person.Document;
+            existing.Street = person.Street;
+            existing.Number = person.Number;
+            existing.City = person.City;
+            existing.Neighborhood = person.Neighborhood;
+            existing.State = person.State;
+            existing.Email = person.Email;
+            existing.IsCustomer = person.IsCustomer;
+
             await _db.SaveChangesAsync();
 
             return person;

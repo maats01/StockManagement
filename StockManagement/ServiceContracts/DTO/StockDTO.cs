@@ -12,6 +12,20 @@ namespace ServiceContracts.DTO
         public int Quantity { get; set; }
         public float Cost { get; set; }
         public float Total { get; set; }
+
+        public StockUpdateDTO ToStockUpdateDTO()
+        {
+            return new StockUpdateDTO()
+            {
+                ID = ID,
+                Description = Description,
+                MeasureUnit = MeasureUnit,
+                MinimumStock = MinimumStock,
+                MaximumStock = MaximumStock,
+                Quantity = Quantity,
+                Cost = Cost
+            };
+        }
     }
 
     public static class ExtensionMethodsForStocks
